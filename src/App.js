@@ -3,7 +3,8 @@ import React, { useEffect, useRef, useState } from "react";
 const config = {
   stepSize: 20,
   radiusFactor: 0.5,
-  numOfPoints: "10"
+  numOfPoints: "10",
+  strokeWidth: "3px"
 };
 
 function App() {
@@ -42,7 +43,7 @@ function App() {
           <g
             stroke="black"
             fill="none"
-            strokeWidth="1px"
+            strokeWidth={config.strokeWidth}
             strokeLinecap="round"
             strokeLinejoin="round"
           >
@@ -71,6 +72,7 @@ function getAllLinesForCircle(numOfPoints, radius, offset) {
       const [x2, y2] = points[i];
       lines.push(
         <line
+          onClick={onLineClicked}
           x1={x1}
           y1={y1}
           x2={x2}
@@ -102,6 +104,14 @@ function getAllPointsInCircle(numOfPoints, radius, offset) {
 }
 
 /**
+ * Called when a line is clicked
+ * @param e
+ */
+function onLineClicked(e) {
+  e.target.style.stroke = getRandomColor();
+}
+
+/**
  * Return a point (equidistant) in a circle in [x,y] coordinates
  * @param n - which point in the order
  * @param numOfPoints - how many points total
@@ -117,6 +127,25 @@ function getPointInCircle(n, numOfPoints, radius, offset) {
     radius * Math.sin(n * angle) + offset
   ];
   return nthpoint;
+}
+
+/**
+ * Return a random color in RGB
+ * @returns {string}
+ */
+function getRandomColor() {
+  const c1 = getRandomColorNumber();
+  const c2 = getRandomColorNumber();
+  const c3 = getRandomColorNumber();
+  return `rgb(${c1},${c2},${c3})`;
+}
+
+/**
+ * Return a random number from 0 to 255
+ * @returns {number}
+ */
+function getRandomColorNumber() {
+  return Math.floor(Math.random() * Math.floor(256));
 }
 
 export default App;

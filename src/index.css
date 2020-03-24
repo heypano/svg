@@ -44,3 +44,7 @@ svg{
   display: flex;
   flex-direction: column;
 }
+
+line:hover{
+  stroke-width: 5px;
+}
