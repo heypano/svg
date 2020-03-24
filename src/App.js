@@ -1,23 +1,20 @@
 import React, { useEffect, useRef, useState } from "react";
 
 const config = {
-  lineWidth: 3,
   stepSize: 20,
   radiusFactor: 0.5,
-  numOfPoints: 10
+  numOfPoints: "10"
 };
-const svgNs = "http://www.w3.org/2000/svg";
 
 function App() {
   const svg = useRef(null);
-  const numOfPointsInput = useRef(null);
   const [numOfPoints, setNumOfPoints] = useState(config.numOfPoints);
   const [width, setWidth] = useState(window.innerWidth);
   const [height, setHeight] = useState(window.innerHeight);
   const radius = Math.min(width, height) * config.radiusFactor;
   const padding = 10;
   const offset = radius * config.radiusFactor * 2 + padding;
-  const lines = [];
+  const lines = getAllLinesForCircle(numOfPoints, radius, offset);
 
   useEffect(() => {
     function handleResize() {
@@ -28,15 +25,6 @@ function App() {
     setTimeout(handleResize, 0);
   });
 
-  for (let i = 1; i <= numOfPoints; i++) {
-    const thisOne = i;
-    const theNextOne = i + 1 <= numOfPoints ? i + 1 : 1;
-    const [x1, y1] = getPointInCircle(thisOne, numOfPoints, radius, offset);
-    const [x2, y2] = getPointInCircle(theNextOne, numOfPoints, radius, offset);
-
-    lines.push(<line x1={x1} y1={y1} x2={x2} y2={y2} key={i}></line>);
-  }
-
   return (
     <div className="app">
       <div className="controls">
@@ -46,22 +34,15 @@ function App() {
           onChange={e => setNumOfPoints(e.target.value)}
           defaultValue={config.numOfPoints}
           min={3}
-          max={500}
+          max={65}
         />
       </div>
       <div className="svg-container">
         <svg xmlns="http://www.w3.org/2000/svg" version="1.1" ref={svg}>
-          {/*<circle*/}
-          {/*  cx={offset}*/}
-          {/*  cy={offset}*/}
-          {/*  r={radius}*/}
-          {/*  fill="none"*/}
-          {/*  stroke="black"*/}
-          {/*/>*/}
           <g
             stroke="black"
             fill="none"
-            strokeWidth="3"
+            strokeWidth="1px"
             strokeLinecap="round"
             strokeLinejoin="round"
           >
@@ -73,6 +54,61 @@ function App() {
   );
 }
 
+/**
+ * Return the array of lines between all points in a circle
+ * @param numOfPoints - how many points total
+ * @param radius - what is the radius
+ * @param offset - how many px should we offset the circle from 0,0
+ * @returns {[]}
+ */
+function getAllLinesForCircle(numOfPoints, radius, offset) {
+  const points = getAllPointsInCircle(numOfPoints, radius, offset);
+  const lines = [];
+
+  while (points.length) {
+    const [x1, y1] = points.pop();
+    for (let i = 0; i < points.length; i++) {
+      const [x2, y2] = points[i];
+      lines.push(
+        <line
+          x1={x1}
+          y1={y1}
+          x2={x2}
+          y2={y2}
+          key={`(${x1},${y1}) to (${x2},${y2})`}
+        ></line>
+      );
+    }
+  }
+  return lines;
+}
+
+/**
+ * Return the array of points
+ * @param numOfPoints - how many points total
+ * @param radius - what is the radius
+ * @param offset - how many px should we offset the circle from 0,0
+ * @returns {[]}
+ */
+function getAllPointsInCircle(numOfPoints, radius, offset) {
+  const points = [];
+
+  for (let i = 1; i <= numOfPoints; i++) {
+    const point = getPointInCircle(i, numOfPoints, radius, offset);
+    points.push(point);
+  }
+
+  return points;
+}
+
+/**
+ * Return a point (equidistant) in a circle in [x,y] coordinates
+ * @param n - which point in the order
+ * @param numOfPoints - how many points total
+ * @param radius - what is the radius
+ * @param offset - how many px should we offset the circle from 0,0
+ * @returns {*[]}
+ */
 function getPointInCircle(n, numOfPoints, radius, offset) {
   const angle = 2 * (Math.PI / numOfPoints);
 
