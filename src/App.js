@@ -4,25 +4,28 @@ const config = {
   lineWidth: 3,
   stepSize: 20,
   radiusFactor: 0.5,
-  numOfPoints: 15
+  numOfPoints: 10
 };
 const svgNs = "http://www.w3.org/2000/svg";
 
 function App() {
   const svg = useRef(null);
+  const numOfPointsInput = useRef(null);
+  const [numOfPoints, setNumOfPoints] = useState(config.numOfPoints);
   const [width, setWidth] = useState(window.innerWidth);
   const [height, setHeight] = useState(window.innerHeight);
   const radius = Math.min(width, height) * config.radiusFactor;
-  const offset = radius * config.radiusFactor * 2;
+  const padding = 10;
+  const offset = radius * config.radiusFactor * 2 + padding;
   const lines = [];
-  const { numOfPoints } = config;
 
   useEffect(() => {
     function handleResize() {
-      setWidth(window.innerWidth);
-      setHeight(window.innerHeight);
+      setWidth(svg.current.width.baseVal.value - padding * 2);
+      setHeight(svg.current.height.baseVal.value - padding * 2);
     }
     window.addEventListener("resize", handleResize);
+    setTimeout(handleResize, 0);
   });
 
   for (let i = 1; i <= numOfPoints; i++) {
@@ -35,18 +38,38 @@ function App() {
   }
 
   return (
-    <svg xmlns="http://www.w3.org/2000/svg" version="1.1" ref={svg}>
-      <circle cx={offset} cy={offset} r={radius} fill="none" stroke="black" />
-      <g
-        stroke="black"
-        fill="none"
-        strokeWidth="3"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      >
-        {lines}
-      </g>
-    </svg>
+    <div className="app">
+      <div className="controls">
+        <label>How many points?</label>
+        <input
+          type="number"
+          onChange={e => setNumOfPoints(e.target.value)}
+          defaultValue={config.numOfPoints}
+          min={3}
+          max={500}
+        />
+      </div>
+      <div className="svg-container">
+        <svg xmlns="http://www.w3.org/2000/svg" version="1.1" ref={svg}>
+          {/*<circle*/}
+          {/*  cx={offset}*/}
+          {/*  cy={offset}*/}
+          {/*  r={radius}*/}
+          {/*  fill="none"*/}
+          {/*  stroke="black"*/}
+          {/*/>*/}
+          <g
+            stroke="black"
+            fill="none"
+            strokeWidth="3"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          >
+            {lines}
+          </g>
+        </svg>
+      </div>
+    </div>
   );
 }
 
