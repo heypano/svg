@@ -1,110 +1,83 @@
 import { getRandomColor } from "../util";
-import React, { useEffect, useRef, useState } from "react";
+import React from "react";
 
-const Wrong = props => {
-  const svg = useRef(null);
-  const [width, setWidth] = useState(window.innerWidth);
-  const [height, setHeight] = useState(window.innerHeight);
-
-  useEffect(() => {
-    function handleResize() {
-      setWidth(svg.current.width.baseVal.value - padding * 2);
-      setHeight(svg.current.height.baseVal.value - padding * 2);
-    }
-    window.addEventListener("resize", handleResize);
-    setTimeout(handleResize, 0);
-  });
-  return (
-    <>
-      <div className="svg-container">
-        <svg xmlns="http://www.w3.org/2000/svg" version="1.1" ref={svg}>
-          <g
-            stroke="black"
-            fill="none"
-            strokeWidth={config.strokeWidth}
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          >
-            <line x1={0} x2={100} y1={200} y2={200} />
-          </g>
-        </svg>
-      </div>
-    </>
-  );
+const config = {
+  stepSize: 20,
+  radiusFactor: 0.5,
+  numOfPoints: "10",
+  strokeWidth: "3px"
 };
 
-export default Circle;
+class Wrong extends React.Component {
+  constructor(props) {
+    super(props);
+  }
 
-/**
- * Return the array of lines between all points in a circle
- * @param numOfPoints - how many points total
- * @param radius - what is the radius
- * @param offset - how many px should we offset the circle from 0,0
- * @returns {[]}
- */
-export function getAllLinesForCircle(numOfPoints, radius, offset) {
-  const points = getAllPointsInCircle(numOfPoints, radius, offset);
-  const lines = [];
+  componentDidMount() {
+    const cir = document.getElementById("circleee");
+    let goingUp = true;
+    function handleMouseMove(event) {
+      if (cir) {
+        const { clientX, clientY } = event;
+        const x = clientX !== undefined ? clientX : event.touches[0].clientX;
+        const y = clientY !== undefined ? clientY : event.touches[0].clientY;
+        const maxScale = 2;
+        const minScale = 1;
+        const step = 0.005;
 
-  while (points.length) {
-    const [x1, y1] = points.pop();
-    for (let i = 0; i < points.length; i++) {
-      const [x2, y2] = points[i];
-      lines.push(
-        <line
-          onClick={onLineClicked}
-          x1={x1}
-          y1={y1}
-          x2={x2}
-          y2={y2}
-          key={`(${x1},${y1}) to (${x2},${y2})`}
-        ></line>
-      );
+        const match = cir.style.transform.match(/scale\((.+),[\s]*(.+)\)/);
+
+        let scaleX;
+        let scaleY;
+        if (match) {
+          const currentScaleX = +match[1];
+          const currentScaleY = +match[2];
+          const scaleXUp = currentScaleX + step;
+          const scaleXDown = currentScaleX - step;
+          const scaleYUp = currentScaleY + step;
+          const scaleYDown = currentScaleY - step;
+          const wouldBeTooBig = scaleXUp > maxScale || scaleYUp > maxScale;
+          const wouldBeTooSmall =
+            scaleXDown < minScale || scaleYDown < minScale;
+          if (goingUp && wouldBeTooBig) {
+            goingUp = false;
+          } else if (!goingUp && wouldBeTooSmall) {
+            goingUp = true;
+          }
+          scaleX = goingUp ? scaleXUp : scaleXDown;
+          scaleY = goingUp ? scaleYUp : scaleYDown;
+        } else {
+          scaleX = 1;
+          scaleY = 1;
+        }
+        cir.style.transform = `translate(${x}px,${y}px) scale(${scaleX},${scaleY})`;
+      }
     }
-  }
-  return lines;
-}
-
-/**
- * Return the array of points
- * @param numOfPoints - how many points total
- * @param radius - what is the radius
- * @param offset - how many px should we offset the circle from 0,0
- * @returns {[]}
- */
-export function getAllPointsInCircle(numOfPoints, radius, offset) {
-  const points = [];
-
-  for (let i = 1; i <= numOfPoints; i++) {
-    const point = getPointInCircle(i, numOfPoints, radius, offset);
-    points.push(point);
+    window.addEventListener("mousemove", handleMouseMove);
+    window.addEventListener("touchmove", handleMouseMove);
   }
 
-  return points;
+  render() {
+    const padding = 10;
+
+    return (
+      <>
+        <div className="svg-container">
+          <svg xmlns="http://www.w3.org/2000/svg" version="1.1">
+            <g
+              stroke="black"
+              fill="hotpink"
+              strokeWidth={config.strokeWidth}
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            >
+              <circle r={100} id="circleee" cx={0} cy={0} id="circleee" />
+            </g>
+          </svg>
+        </div>
+      </>
+    );
+  }
 }
 
-/**
- * Called when a line is clicked
- * @param e
- */
-function onLineClicked(e) {
-  e.target.style.stroke = getRandomColor();
-}
-
-/**
- * Return a point (equidistant) in a circle in [x,y] coordinates
- * @param n - which point in the order
- * @param numOfPoints - how many points total
- * @param radius - what is the radius
- * @param offset - how many px should we offset the circle from 0,0
- * @returns {*[]}
- */
-export function getPointInCircle(n, numOfPoints, radius, offset) {
-  const angle = 2 * (Math.PI / numOfPoints);
-
-  const nthpoint = [
-    radius * Math.cos(n * angle) + offset,
-    radius * Math.sin(n * angle) + offset
-  ];
-  return nthpoint;
-}
+export default Wrong;

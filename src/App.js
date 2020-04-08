@@ -1,6 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
-import { getRandomColor } from "./util";
-import Circle from "./components/Circle";
+import React from "react";
 import Wrong from "./components/Wrong";
 
 function App() {
