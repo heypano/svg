@@ -4,6 +4,7 @@ import Circle from "./components/Circle";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import Cloud from "./components/Cloud";
 import "./final.css";
+import Cat from "./components/Cat";
 
 function App() {
   return (
@@ -26,6 +27,7 @@ function App() {
           <Route exact path="/circle" component={Circle} />
           <Route exact path="/wrong" component={Wrong} />
           <Route exact path="/cloud" component={Cloud} />
+          <Route exact path="/cat" component={Cat} />
         </Switch>
       </div>
     </Router>
