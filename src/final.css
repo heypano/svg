@@ -13184,57 +13184,6 @@ video {
   transition-duration: 1000ms;
 }
 
-body {
-  margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
-
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
-}
-
-*{
-  box-sizing: border-box;
-}
-
-html, body, #root, .app, .svg-container {
-  height: 100%;
-  margin: 0;
-  border: 1px solid black;
-}
-
-.controls{
-  padding: 10px;
-}
-
-label{
-  margin-right: 10px;
-}
-
-input[type=number]{
-  padding: 5px;
-  font-size: 1em;
-}
-
-svg{
-  width: 100%;
-  height: 100%;
-}
-
-.app{
-  display: flex;
-  flex-direction: column;
-}
-
-line:hover{
-  stroke-width: 5px;
-}
-
 @media (min-width: 640px) {
   .sm\:sr-only {
     position: absolute;
