@@ -55,11 +55,13 @@ class CatClip extends React.Component {
       rectangles: []
     };
     this.groupRef = React.createRef();
+    this.svgRef = React.createRef();
     this.onSvgClick = this.onSvgClick.bind(this);
   }
   componentDidMount() {}
 
   onSvgClick(e) {
+    const svg = this.svgRef.current;
     const group = this.groupRef.current;
     const x = e.nativeEvent.offsetX;
     const y = e.nativeEvent.offsetY;
@@ -76,6 +78,7 @@ class CatClip extends React.Component {
         version="1.1"
         id="Layer_1"
         xmlns="http://www.w3.org/2000/svg"
+        ref={this.svgRef}
         x="0px"
         y="0px"
         viewBox="0 0 514.6 516.4"
@@ -89,16 +92,24 @@ class CatClip extends React.Component {
           <CatPath />
         </clipPath>
         <g clipPath="url(#cat)" width="100%" height="100%" ref={this.groupRef}>
-          {this.state.rectangles.map((position, index) => (
-            <rect
-              x={position.x}
-              y={position.y}
-              width="100"
-              height="100"
-              key={index}
-              fill="red"
-            />
-          ))}
+          {this.state.rectangles.map((position, index) => {
+            const svg = this.svgRef.current;
+            const pt = svg.createSVGPoint();
+
+            pt.x = position.x;
+            pt.y = position.y;
+            const { x, y } = pt.matrixTransform(svg.getScreenCTM().inverse());
+            return (
+              <rect
+                x={x}
+                y={y}
+                width="100"
+                height="100"
+                key={index}
+                fill="red"
+              />
+            );
+          })}
           <CatPath className="catOutline" />
         </g>
       </svg>
