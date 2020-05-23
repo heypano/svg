@@ -19,7 +19,6 @@ code {
 html, body, #root, .app, .svg-container {
   height: 100%;
   margin: 0;
-  border: 1px solid black;
 }
 
 .controls{

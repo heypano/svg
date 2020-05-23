@@ -1,26 +1,10 @@
-import { getPointInSvgFromEvent, getRandomColor } from "../util";
-import React, { useEffect, useRef, useState } from "react";
+import { getPointInSvgFromEvent } from "../util";
+import React from "react";
 
 const Cat = props => {
-  const svg = useRef(null);
-  // const [width, setWidth] = useState(window.innerWidth);
-  // const [height, setHeight] = useState(window.innerHeight);
-  // const padding = 10;
-
-  useEffect(() => {
-    // function handleResize() {
-    //   setWidth(svg.current.width.baseVal.value - padding * 2);
-    //   setHeight(svg.current.height.baseVal.value - padding * 2);
-    // }
-    // window.addEventListener("resize", handleResize);
-    // setTimeout(handleResize, 0);
-  });
   return (
     <>
       <div className="svg-container">
-        {/*<svg xmlns="http://www.w3.org/2000/svg" version="1.1" ref={svg}>*/}
-        {/*  */}
-        {/*</svg>*/}
         <CatClip />
       </div>
     </>

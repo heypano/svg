@@ -9,10 +9,6 @@ const config = {
 };
 
 class Wrong extends React.Component {
-  constructor(props) {
-    super(props);
-  }
-
   componentDidMount() {
     const cir = document.getElementById("circle");
     const group = document.getElementById("circleg");
@@ -56,8 +52,6 @@ class Wrong extends React.Component {
   }
 
   render() {
-    const padding = 10;
-
     return (
       <>
         <div className="svg-container">
@@ -70,7 +64,7 @@ class Wrong extends React.Component {
               strokeLinejoin="round"
               id="circleg"
             >
-              <circle r={100} id="circleee" cx={0} cy={0} id="circle" />
+              <circle r={100} cx={0} cy={0} id="circle" />
             </g>
           </svg>
         </div>

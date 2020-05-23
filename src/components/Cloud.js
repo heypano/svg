@@ -1,4 +1,3 @@
-import { getColorByMousePosition } from "../util";
 import React from "react";
 
 let multiplier = 1;
@@ -9,8 +8,6 @@ const getPath = (x, y) => {
   // const finalX = (1 / scale) * (-35 + x); //- window.innerWidth / 2;
   // const finalY = (1 / scale) * y; //- window.innerHeight / 2;
   const finalX = x - 35;
-  const a = "το κάτυ";
-
   const finalY = y;
   const v1 = Math.round(20 + multiplier);
   const v2 = Math.round(15 + multiplier);
@@ -25,10 +22,6 @@ const getPath = (x, y) => {
 };
 
 class Cloud extends React.Component {
-  constructor(props) {
-    super(props);
-  }
-
   componentDidMount() {
     const path = document.getElementById("cloud-path");
     const svg = document.getElementById("svg-element");
@@ -48,9 +41,6 @@ class Cloud extends React.Component {
       if (path) {
         // multiplier += step;
         scale = +(step + scale).toFixed(1);
-        const { clientX, clientY } = event;
-        const x = clientX !== undefined ? clientX : event.touches[0].clientX;
-        const y = clientY !== undefined ? clientY : event.touches[0].clientY;
         // path.setAttribute("d", getPath(x, y));
         // path.setAttribute("transform", `scale(${scale})`);
         svg.setAttribute(
@@ -65,7 +55,6 @@ class Cloud extends React.Component {
   }
 
   render() {
-    const padding = 10;
     const cloudFill = "aliceblue";
     const cloudStroke = "black";
 
