@@ -18,6 +18,34 @@ export function getRandomColorNumber() {
 }
 
 /**
+ * Return the coordinates in an SVG based on a event (e.g. mouse)
+ * @param {SVGSVGElement} svg
+ * @param {SyntheticMouseEvent} the mouse event
+ * @returns {[Number, Number]}
+ */
+export function getPointInSvgFromEvent(svg, event) {
+  const x = event.nativeEvent.offsetX;
+  const y = event.nativeEvent.offsetY;
+  return getPointInSvg(svg, x, y);
+}
+
+/**
+ * Return the coordinates in an SVG based on the DOM
+ * @param {SVGSVGElement} svg
+ * @param {Number} otherX
+ * @param {Number} otherY
+ * @returns {[Number, Number]}
+ */
+export function getPointInSvg(svg, otherX, otherY) {
+  const pt = svg.createSVGPoint();
+
+  pt.x = otherX;
+  pt.y = otherY;
+  const { x, y } = pt.matrixTransform(svg.getScreenCTM().inverse());
+  return [x, y];
+}
+
+/**
  * Return a color that is proportionate to the width value passed
  * @param {Number} mouseX - the current x value of the mouse/finger
  * @param {Number} mouseY  - the current y value of the mouse/finger

@@ -1,4 +1,4 @@
-import { getRandomColor } from "../util";
+import { getPointInSvgFromEvent, getRandomColor } from "../util";
 import React, { useEffect, useRef, useState } from "react";
 
 const Cat = props => {
@@ -60,11 +60,9 @@ class CatClip extends React.Component {
   }
   componentDidMount() {}
 
-  onSvgClick(e) {
+  onSvgClick(event) {
     const svg = this.svgRef.current;
-    const group = this.groupRef.current;
-    const x = e.nativeEvent.offsetX;
-    const y = e.nativeEvent.offsetY;
+    const [x, y] = getPointInSvgFromEvent(svg, event);
     this.setState({
       ...this.state,
       rectangles: [...this.state.rectangles, { x, y }]
@@ -93,12 +91,7 @@ class CatClip extends React.Component {
         </clipPath>
         <g clipPath="url(#cat)" width="100%" height="100%" ref={this.groupRef}>
           {this.state.rectangles.map((position, index) => {
-            const svg = this.svgRef.current;
-            const pt = svg.createSVGPoint();
-
-            pt.x = position.x;
-            pt.y = position.y;
-            const { x, y } = pt.matrixTransform(svg.getScreenCTM().inverse());
+            const { x, y } = position;
             return (
               <rect
                 x={x}
