@@ -7,6 +7,7 @@ import "./final.css";
 import Cat from "./components/Cat";
 import Test from "./components/Test";
 import Draw from "./components/Draw";
+import Paths from "./components/Paths";
 
 function App() {
   return (
@@ -20,6 +21,7 @@ function App() {
           <Route exact path="/cat" component={Cat} />
           <Route exact path="/test" component={Test} />
           <Route exact path="/draw" component={Draw} />
+          <Route exact path="/paths" component={Paths} />
         </Switch>
       </div>
     </Router>
