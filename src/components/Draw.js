@@ -47,6 +47,7 @@ class Draw extends React.Component {
    * @param event
    */
   startDrawing(event) {
+    console.log(event.nativeEvent);
     const svg = this.svgRef.current;
     const [x, y] = getPointInSvgFromEvent(svg, event);
     this.setState({ ...this.state, drawing: true }, () => {

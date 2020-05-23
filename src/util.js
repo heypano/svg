@@ -24,8 +24,9 @@ export function getRandomColorNumber() {
  * @returns {[Number, Number]}
  */
 export function getPointInSvgFromEvent(svg, event) {
-  const x = event.nativeEvent.offsetX;
-  const y = event.nativeEvent.offsetY;
+  const { offsetX, offsetY, touches } = event.nativeEvent;
+  const x = touches ? touches[0].clientX : offsetX;
+  const y = touches ? touches[0].clientY : offsetY;
   return getPointInSvg(svg, x, y);
 }
 
