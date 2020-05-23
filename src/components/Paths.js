@@ -89,6 +89,7 @@ class Draw extends React.Component {
         >
           <g width="100%" height="100%" ref={this.groupRef}>
             <path
+              fillRule="evenodd"
               d={`M 100 0 C 25 50, 25 100, 100 100 ${this.getPathFromPoints()}`}
             />
             {this.state.points.map(([x, y], index) => {
