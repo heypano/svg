@@ -6,20 +6,20 @@ import Cloud from "./components/Cloud";
 import "./final.css";
 import Cat from "./components/Cat";
 import Test from "./components/Test";
-import ClickPath from "./components/ClickPath";
+import Draw from "./components/Draw";
 
 function App() {
   return (
     <Router>
       <div className="app">
         <Switch>
-          <Route exact path="/" render={() => <ClickPath />} />
+          <Route exact path="/" render={() => <Draw />} />
           <Route exact path="/circle" component={Circle} />
           <Route exact path="/wrong" component={Wrong} />
           <Route exact path="/cloud" component={Cloud} />
           <Route exact path="/cat" component={Cat} />
           <Route exact path="/test" component={Test} />
-          <Route exact path="/clickpath" component={ClickPath} />
+          <Route exact path="/draw" component={Draw} />
         </Switch>
       </div>
     </Router>

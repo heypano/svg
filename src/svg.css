@@ -1,0 +1,15 @@
+.hotpink{
+  fill: hotpink;
+  stroke: black;
+}
+.green{
+  stroke: black;
+  fill: limegreen;
+}
+
+.markerdot{
+  fill: limegreen;
+}
+.markerline{
+  stroke: red;
+}
