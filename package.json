@@ -18,6 +18,8 @@
     "start": "npm run build:style && react-scripts start",
     "predeploy": "npm run build",
     "deploy": "gh-pages -d build",
+    "awsdeploy": "aws s3 sync --delete --acl public-read build/ s3://catpaint",
+    "postawsdeploy": "echo http://catpaint.s3-website-us-east-1.amazonaws.com/draw",
     "build:style": "tailwind build src/tailwindimports.css -c tailwind.config.js -o src/final.css",
     "build": "npm run build:style && react-scripts build",
     "postbuild": "cp build/index.html build/404.html",
