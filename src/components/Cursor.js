@@ -8,7 +8,6 @@ import {
   setPosition,
   setCurrentTool,
   setNextToolStage,
-  setCurrentToolName,
   selectTools
 } from "../redux/features/cursor/cursorSlice";
 import { throttle } from "throttle-debounce";
@@ -21,32 +20,41 @@ class Cursor extends React.Component {
   componentDidMount() {
     document.onmousemove = this.onMouseMove.bind(this);
     document.onwheel = this.onWheel.bind(this);
+    document.onMouseDown = this.onMouseDown.bind(this);
   }
   onMouseMove(event) {
     const { clientX: x, clientY: y } = event;
     this.throttledSetPosition({ x, y });
   }
-  onWheel(event) {
-    const { deltaY } = event;
-    let nextToolIndex;
-
-    if (deltaY > 0) {
-      // Previous tool
-      if (this.props.currentTool > 1) {
-        nextToolIndex = this.props.currentTool - 1;
-      } else {
-        nextToolIndex = this.props.tools.length - 1;
-      }
-    } else {
-      // Next tool
-      if (this.props.currentTool < this.props.tools.length - 1) {
-        nextToolIndex = this.props.currentTool + 1;
-      } else {
-        nextToolIndex = 0;
-      }
+  onMouseDown(event) {
+    if (event.which === 2) {
+      this.onMiddleClick(event);
     }
-    this.props.setCurrentTool(nextToolIndex);
-    this.props.setCurrentToolName(this.props.tools[nextToolIndex].toolName);
+  }
+  onMiddleClick(event) {}
+  onWheel(event) {
+    // Do not mess with non zero tool stages
+    if (this.props.toolStage == 0) {
+      const { deltaY } = event;
+      let nextToolIndex;
+
+      if (deltaY > 0) {
+        // Previous tool
+        if (this.props.currentTool > 1) {
+          nextToolIndex = this.props.currentTool - 1;
+        } else {
+          nextToolIndex = this.props.tools.length - 1;
+        }
+      } else {
+        // Next tool
+        if (this.props.currentTool < this.props.tools.length - 1) {
+          nextToolIndex = this.props.currentTool + 1;
+        } else {
+          nextToolIndex = 0;
+        }
+      }
+      this.props.setCurrentTool(nextToolIndex);
+    }
   }
 
   render() {
@@ -75,8 +83,7 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = {
   setPosition,
   setCurrentTool,
-  setNextToolStage,
-  setCurrentToolName
+  setNextToolStage
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Cursor);

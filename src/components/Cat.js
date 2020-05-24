@@ -1,7 +1,7 @@
 import { getPointInSvgFromEvent } from "../util";
 import React, { useRef } from "react";
 import { connect } from "react-redux";
-import { addPoint, selectPoints } from "../redux/features/points/pointsSlice";
+import { addPoint, selectPoints } from "../redux/features/cursor/cursorSlice";
 import Cursor from "./Cursor";
 import {
   selectIsDrawing,

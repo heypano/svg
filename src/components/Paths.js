@@ -3,12 +3,17 @@ import React from "react";
 import { throttle } from "throttle-debounce";
 import { getRandomColor } from "../util";
 import Mark from "./Mark";
-import { addPoint, selectPoints } from "../redux/features/points/pointsSlice";
+import { addPoint, selectPoints } from "../redux/features/cursor/cursorSlice";
 import Cursor from "./Cursor";
 import {
+  resetCurrentTool,
+  selectCurrentTool,
   selectIsDrawing,
+  selectTools,
+  selectToolStage,
   setIsDrawing,
-  setIsNotDrawing
+  setIsNotDrawing,
+  setNextToolStage
 } from "../redux/features/cursor/cursorSlice";
 import { connect } from "react-redux";
 
@@ -24,12 +29,20 @@ class Paths extends React.Component {
   }
 
   getPathFromPoints() {
+    const { points } = this.props;
     let result = "";
-    for (let i = 0; i < this.props.points.length - 1; i += 2) {
-      const { x: x1, y: y1 } = this.props.points[i];
-      const { x: x2, y: y2 } = this.props.points[i + 1];
-      result += `S ${x1} ${y1}, ${x2} ${y2} `;
+    for (const point of points) {
+      const { x, y, type, stage } = point;
+      const { stages, toolName } = this.props.tools[type];
+      if (stage == 0) {
+        result += `${toolName} ${x} ${y}, `;
+      } else {
+        result += `${x} ${y}, `;
+      }
+      // const { x: x2, y: y2, type: t2, stage: s2 } = points[i + 1];
+      // result += `S ${x1} ${y1}, ${x2} ${y2} `;
     }
+    console.log(result);
     return result;
   }
 
@@ -46,7 +59,12 @@ class Paths extends React.Component {
   }
 
   drawPoint(x, y) {
-    this.props.addPoint({ x, y });
+    this.props.addPoint({
+      x,
+      y,
+      type: this.props.currentTool,
+      stage: this.props.toolStage
+    });
   }
 
   mouseOrTouchDown(event) {
@@ -55,6 +73,7 @@ class Paths extends React.Component {
     this.props.setIsDrawing();
     this.drawPoint(x, y);
   }
+
   mouseOrTouchUp(event) {
     this.props.setIsNotDrawing();
   }
@@ -75,11 +94,16 @@ class Paths extends React.Component {
           <g width="100%" height="100%" ref={this.groupRef}>
             <path
               fillRule="evenodd"
-              d={`M 100 0 C 25 50, 25 100, 100 100 ${this.getPathFromPoints()}`}
+              fill="none"
+              stroke="black"
+              strokeWidth={1}
+              // d={`M 100 0 C 25 50, 25 100, 100 100 ${this.getPathFromPoints()}`}
+              d={`${this.getPathFromPoints()}`}
             />
             {this.props.points.map(({ x, y }, index) => {
-              const color = index % 2 ? "red" : "green";
-              return <Mark x={x} y={y} r={5} fill={color} />;
+              // const color = index % 2 ? "red" : "green";
+              const color = "grey";
+              return <Mark x={x} y={y} r={5} fill={color} key={index} />;
             })}
           </g>
         </svg>
@@ -90,8 +114,17 @@ class Paths extends React.Component {
 
 const mapStateToProps = state => ({
   points: selectPoints(state),
-  isDrawing: selectIsDrawing(state)
+  currentTool: selectCurrentTool(state),
+  toolStage: selectToolStage(state),
+  isDrawing: selectIsDrawing(state),
+  tools: selectTools(state)
 });
-const mapDispatchToProps = { addPoint, setIsNotDrawing, setIsDrawing };
+const mapDispatchToProps = {
+  addPoint,
+  setIsNotDrawing,
+  setIsDrawing,
+  resetCurrentTool,
+  setNextToolStage
+};
 
 export default connect(mapStateToProps, mapDispatchToProps)(Paths);
