@@ -249,15 +249,19 @@ class Cat extends React.Component {
             className="catgroup"
           >
             {this.props.points.map((position, index) => {
+              const size = 50;
               const { x, y } = position;
               return (
-                <circle
-                  cx={x}
-                  cy={y}
-                  r={30}
-                  key={index}
-                  fill="url(#GradientReflect)"
-                />
+                // <circle
+                //   cx={x}
+                //   cy={y}
+                //   r={30}
+                //   key={index}
+                //   fill="url(#GradientReflect)"
+                // />
+                <text x={x - size / 2} y={y + size / 2} fontSize={`${size}px`}>
+                  😺
+                </text>
               );
             })}
           </g>

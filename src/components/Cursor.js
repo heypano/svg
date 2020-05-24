@@ -25,7 +25,8 @@ class TrackMouse extends React.Component {
       <div
         style={{
           position: "fixed",
-          transform: `translate(${x}px, ${y + 10}px)`
+          transform: `translate(${x}px, ${y + 10}px)`,
+          fontSize: "8rem"
         }}
       >
         🐁
