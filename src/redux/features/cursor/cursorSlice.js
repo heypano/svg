@@ -41,11 +41,11 @@ const tools = [
   {
     stages: 1,
     toolName: "T"
-  },
-  {
-    stages: 2,
-    toolName: "A"
   }
+  // {
+  //   stages: 2,
+  //   toolName: "A"
+  // }
 ];
 
 const nextTool = state => {
