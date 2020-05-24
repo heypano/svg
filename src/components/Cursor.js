@@ -50,16 +50,20 @@ class Cursor extends React.Component {
   render() {
     const { x, y } = this.props.cursor;
     return (
-      <div
-        style={{
-          position: "fixed",
-          transform: `translate(${x}px, ${y + 10}px)`,
-          fontSize: "8rem"
-        }}
-      >
-        {this.props.toolName}
-        <span style={{ fontSize: "3rem" }}>{this.props.toolStage}</span>
-      </div>
+      <>
+        {this.props.debug && (
+          <div
+            style={{
+              position: "fixed",
+              transform: `translate(${x}px, ${y + 10}px)`,
+              fontSize: "8rem"
+            }}
+          >
+            {this.props.toolName}
+            <span style={{ fontSize: "3rem" }}>{this.props.toolStage}</span>
+          </div>
+        )}
+      </>
     );
   }
 }

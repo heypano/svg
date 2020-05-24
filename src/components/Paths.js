@@ -97,7 +97,7 @@ class Paths extends React.Component {
   render() {
     return (
       <div className="svg-container">
-        <Cursor />
+        <Cursor debug={true} />
         <svg
           onMouseDown={this.mouseOrTouchDown}
           // onTouchStart={this.mouseOrTouchUp}

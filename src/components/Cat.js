@@ -1,5 +1,5 @@
 import { getPointInSvgFromEvent } from "../util";
-import React, { useRef } from "react";
+import React from "react";
 import { connect } from "react-redux";
 import { addPoint, selectPoints } from "../redux/features/cursor/cursorSlice";
 import Cursor from "./Cursor";
@@ -218,7 +218,7 @@ class Cat extends React.Component {
   render() {
     return (
       <div className="svg-container">
-        <Cursor />
+        <Cursor debug={false} />
         <svg
           onMouseDown={this.mouseOrTouchDown}
           // onTouchStart={this.mouseOrTouchUp}
