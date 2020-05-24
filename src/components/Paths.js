@@ -28,13 +28,31 @@ class Paths extends React.Component {
   }
 
   getPathFromPoints() {
-    const { points } = this.props;
     let result = "";
-    for (const point of points) {
+    const filteredPoints = [...this.props.points];
+
+    // Remove incomplete paths
+    for (let i = filteredPoints.length - 1; i > 0; i--) {
+      const point = filteredPoints[i];
+      const { type, stage } = point;
+      const { stages } = this.props.tools[type];
+      if (stage < stages - 1) {
+        filteredPoints.splice(i);
+      }
+      if (stage == stages - 1) {
+        break;
+      }
+    }
+
+    for (const point of filteredPoints) {
       const { x, y, type, stage } = point;
-      const { stages, toolName } = this.props.tools[type];
+      const { stages, toolName, noPoints } = this.props.tools[type];
       if (stage == 0) {
-        result += `${toolName} ${x} ${y}, `;
+        if (noPoints) {
+          result += `${toolName} `;
+        } else {
+          result += `${toolName} ${x} ${y}, `;
+        }
       } else {
         result += `${x} ${y}, `;
       }

@@ -10,8 +10,17 @@ const tools = [
     disallowDupes: true
   },
   {
+    stages: 3,
+    toolName: "C"
+  },
+  {
     stages: 1,
     toolName: "L"
+  },
+  {
+    stages: 1,
+    toolName: "Z",
+    noPoints: true
   },
   // {
   //   stages: 1,
@@ -21,10 +30,6 @@ const tools = [
   //   stages: 1,
   //   toolName: "V"
   // },
-  {
-    stages: 3,
-    toolName: "C"
-  },
   {
     stages: 2,
     toolName: "S"
