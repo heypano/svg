@@ -56,7 +56,8 @@ class Cursor extends React.Component {
             style={{
               position: "fixed",
               transform: `translate(${x}px, ${y + 10}px)`,
-              fontSize: "8rem"
+              fontSize: "8rem",
+              userSelect: "none"
             }}
           >
             {this.props.toolName}
