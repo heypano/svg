@@ -2,6 +2,7 @@ import { getPointInSvgFromEvent } from "../util";
 import React, { useRef } from "react";
 import { connect } from "react-redux";
 import { addPoint, selectPoints } from "../redux/features/points/pointsSlice";
+import Cursor from "./Cursor";
 
 const MaskPath = ({ className }) => (
   <path
@@ -171,6 +172,7 @@ const Cat = props => {
 
   return (
     <div className="svg-container">
+      <Cursor />
       <svg
         onClick={e => onSvgClick(e)}
         version="1.1"
