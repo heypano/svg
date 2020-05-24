@@ -13,3 +13,9 @@
 .markerline{
   stroke: red;
 }
+.catPath{
+  fill: none;
+  stroke: #000;
+  stroke-linecap: round;
+  stroke-miterlimit: 10;
+}

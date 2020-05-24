@@ -8,23 +8,27 @@ import Cat from "./components/Cat";
 import Test from "./components/Test";
 import Draw from "./components/Draw";
 import Paths from "./components/Paths";
+import { Provider } from "react-redux";
+import store from "./redux/store";
 
 function App() {
   return (
-    <Router>
-      <div className="app">
-        <Switch>
-          <Route exact path="/" render={() => <Draw />} />
-          <Route exact path="/circle" component={Circle} />
-          <Route exact path="/wrong" component={Wrong} />
-          <Route exact path="/cloud" component={Cloud} />
-          <Route exact path="/cat" component={Cat} />
-          <Route exact path="/test" component={Test} />
-          <Route exact path="/draw" component={Draw} />
-          <Route exact path="/paths" component={Paths} />
-        </Switch>
-      </div>
-    </Router>
+    <Provider store={store}>
+      <Router>
+        <div className="app">
+          <Switch>
+            <Route exact path="/" render={() => <Draw />} />
+            <Route exact path="/circle" component={Circle} />
+            <Route exact path="/wrong" component={Wrong} />
+            <Route exact path="/cloud" component={Cloud} />
+            <Route exact path="/cat" component={Cat} />
+            <Route exact path="/test" component={Test} />
+            <Route exact path="/draw" component={Draw} />
+            <Route exact path="/paths" component={Paths} />
+          </Switch>
+        </div>
+      </Router>
+    </Provider>
   );
 }
 
