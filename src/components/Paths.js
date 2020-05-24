@@ -6,7 +6,6 @@ import Mark from "./Mark";
 import { addPoint, selectPoints } from "../redux/features/cursor/cursorSlice";
 import Cursor from "./Cursor";
 import {
-  resetCurrentTool,
   selectCurrentTool,
   selectIsDrawing,
   selectTools,
@@ -42,7 +41,6 @@ class Paths extends React.Component {
       // const { x: x2, y: y2, type: t2, stage: s2 } = points[i + 1];
       // result += `S ${x1} ${y1}, ${x2} ${y2} `;
     }
-    console.log(result);
     return result;
   }
 
@@ -123,7 +121,6 @@ const mapDispatchToProps = {
   addPoint,
   setIsNotDrawing,
   setIsDrawing,
-  resetCurrentTool,
   setNextToolStage
 };
 

@@ -8,7 +8,9 @@ import {
   setPosition,
   setCurrentTool,
   setNextToolStage,
-  selectTools
+  selectTools,
+  setPreviousTool,
+  setNextTool
 } from "../redux/features/cursor/cursorSlice";
 import { throttle } from "throttle-debounce";
 
@@ -36,24 +38,12 @@ class Cursor extends React.Component {
     // Do not mess with non zero tool stages
     if (this.props.toolStage == 0) {
       const { deltaY } = event;
-      let nextToolIndex;
 
       if (deltaY > 0) {
-        // Previous tool
-        if (this.props.currentTool > 1) {
-          nextToolIndex = this.props.currentTool - 1;
-        } else {
-          nextToolIndex = this.props.tools.length - 1;
-        }
+        this.props.setPreviousTool();
       } else {
-        // Next tool
-        if (this.props.currentTool < this.props.tools.length - 1) {
-          nextToolIndex = this.props.currentTool + 1;
-        } else {
-          nextToolIndex = 0;
-        }
+        this.props.setNextTool();
       }
-      this.props.setCurrentTool(nextToolIndex);
     }
   }
 
@@ -68,6 +58,7 @@ class Cursor extends React.Component {
         }}
       >
         {this.props.toolName}
+        <span style={{ fontSize: "3rem" }}>{this.props.toolStage}</span>
       </div>
     );
   }
@@ -83,7 +74,9 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = {
   setPosition,
   setCurrentTool,
-  setNextToolStage
+  setNextToolStage,
+  setPreviousTool,
+  setNextTool
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Cursor);

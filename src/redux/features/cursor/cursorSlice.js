@@ -4,21 +4,23 @@ import { createSelector } from "@reduxjs/toolkit";
 const name = "cursor";
 const tools = [
   {
-    stages: 2,
-    toolName: "M"
+    stages: 1,
+    toolName: "M",
+    disabled: false,
+    disallowDupes: true
   },
   {
-    stages: 2,
+    stages: 1,
     toolName: "L"
   },
-  {
-    stages: 1,
-    toolName: "H"
-  },
-  {
-    stages: 1,
-    toolName: "V"
-  },
+  // {
+  //   stages: 1,
+  //   toolName: "H"
+  // },
+  // {
+  //   stages: 1,
+  //   toolName: "V"
+  // },
   {
     stages: 3,
     toolName: "C"
@@ -41,6 +43,29 @@ const tools = [
   }
 ];
 
+const nextTool = state => {
+  let nextToolIndex = state.currentTool;
+  do {
+    if (nextToolIndex < state.tools.length - 1) {
+      nextToolIndex++;
+    } else {
+      nextToolIndex = 0;
+    }
+  } while (state.tools[nextToolIndex].disabled);
+  state.currentTool = nextToolIndex;
+};
+const previousTool = state => {
+  let nextToolIndex = state.currentTool;
+  do {
+    if (nextToolIndex > 0) {
+      nextToolIndex--;
+    } else {
+      nextToolIndex = state.tools.length - 1;
+    }
+  } while (state.tools[nextToolIndex].disabled);
+  state.currentTool = nextToolIndex;
+};
+
 const cursorSlice = createSlice({
   name: name,
   initialState: {
@@ -57,12 +82,12 @@ const cursorSlice = createSlice({
       state.isDrawing = true;
     },
     setCurrentTool(state, { payload }) {
+      const { stages, disabled } = state.tools[payload];
       state.currentTool = payload;
       state.toolStage = 0;
     },
-    resetCurrentTool(state) {
-      state.toolStage = 0;
-    },
+    setNextTool: nextTool,
+    setPreviousTool: previousTool,
     setNextToolStage(state, { payload }) {
       state.toolStage++;
     },
@@ -83,9 +108,28 @@ const cursorSlice = createSlice({
       state.y = y;
     },
     addPoint(state, action) {
+      const { type } = action.payload;
+      const { currentTool } = state;
+      const { stages, disallowDupes } = state.tools[type];
       // const { x, y, type, stage } = action.payload;
       // state.push({ x, y, type, stage });
       state.points.push(action.payload);
+      if (state.toolStage < stages - 1) {
+        state.toolStage++;
+      } else {
+        state.toolStage = 0;
+      }
+      if (disallowDupes) {
+        state.tools[currentTool].disabled = true;
+        nextTool(state);
+      }
+
+      // Re-enable all the other tools
+      for (const tool of Object.keys(state.tools)) {
+        if (tool != currentTool) {
+          state.tools[tool].disabled = false;
+        }
+      }
     }
   }
 });
@@ -128,9 +172,10 @@ export const {
   setPositionX,
   setPositionY,
   addPoint,
-  resetCurrentTool,
   setCurrentTool,
   setNextToolStage,
+  setPreviousTool,
+  setNextTool,
   setIsNotDrawing,
   setIsDrawing
 } = cursorSlice.actions;
