@@ -110,7 +110,7 @@ class Paths extends React.Component {
           <g width="100%" height="100%" ref={this.groupRef}>
             <path
               fillRule="evenodd"
-              fill="none"
+              fill="hsla(150,50%,50%,50%)"
               stroke="black"
               strokeWidth={1}
               // d={`M 100 0 C 25 50, 25 100, 100 100 ${this.getPathFromPoints()}`}

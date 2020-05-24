@@ -15,13 +15,13 @@ const tools = [
   },
   {
     stages: 1,
-    toolName: "L"
-  },
-  {
-    stages: 1,
     toolName: "Z",
     noPoints: true
   },
+  // {
+  //   stages: 1,
+  //   toolName: "L"
+  // },
   // {
   //   stages: 1,
   //   toolName: "H"
