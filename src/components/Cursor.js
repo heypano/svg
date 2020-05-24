@@ -4,14 +4,19 @@ import {
   selectCursorPosition,
   setPosition
 } from "../redux/features/cursor/cursorSlice";
+import { throttle } from "throttle-debounce";
 
 class TrackMouse extends React.Component {
+  constructor(props) {
+    super(props);
+    this.throttledSetPosition = throttle(25, this.props.setPosition.bind(this));
+  }
   componentDidMount() {
     document.onmousemove = this.onMouseMove.bind(this);
   }
   onMouseMove(event) {
     const { clientX: x, clientY: y } = event;
-    this.props.setPosition({ x, y });
+    this.throttledSetPosition({ x, y });
   }
 
   render() {
