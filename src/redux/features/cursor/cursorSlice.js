@@ -16,7 +16,8 @@ const tools = [
   {
     stages: 1,
     toolName: "Z",
-    noPoints: true
+    noPoints: true,
+    disallowDupes: true
   },
   {
     stages: 1,
