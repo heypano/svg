@@ -117,11 +117,11 @@ class Paths extends React.Component {
               // d={`M 100 0 C 25 50, 25 100, 100 100 ${this.getPathFromPoints()}`}
               d={`${this.getPathFromPoints()}`}
             />
-            {this.props.points.map(({ x, y }, index) => {
-              // const color = index % 2 ? "red" : "green";
-              const color = "grey";
-              return <Mark x={x} y={y} r={5} fill={color} key={index} />;
-            })}
+            {/*{this.props.points.map(({ x, y }, index) => {*/}
+            {/*  // const color = index % 2 ? "red" : "green";*/}
+            {/*  const color = "grey";*/}
+            {/*  return <Mark x={x} y={y} r={5} fill={color} key={index} />;*/}
+            {/*})}*/}
           </g>
         </svg>
       </div>
