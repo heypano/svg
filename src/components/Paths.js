@@ -24,6 +24,9 @@ class Paths extends React.Component {
     // this.drawPoint = throttle(25, this.drawPoint.bind(this));
     this.drawPoint = this.drawPoint.bind(this);
     this.drawMove = this.drawMove.bind(this);
+    this.saveImage = this.saveImage.bind(this);
+    this.saveSVG = this.saveSVG.bind(this);
+    this.savePMG = this.savePMG.bind(this);
     this.svgRef = React.createRef();
   }
 
@@ -94,12 +97,90 @@ class Paths extends React.Component {
     this.props.setIsNotDrawing();
   }
 
+  savePMG(e) {
+    e.preventDefault();
+    this.saveImage("png");
+  }
+  saveSVG(e) {
+    e.preventDefault();
+    this.saveImage("svg");
+  }
+
+  saveImage(format) {
+    const name = "unnamed";
+    const sizedSVG = this.getOuterHTML(format);
+    const svgBlob = new Blob([sizedSVG], { type: "image/svg+xml" });
+    const svgUrl = URL.createObjectURL(svgBlob);
+    if (format === "png") {
+      this.convertToPNG(svgUrl).then(href => {
+        console.log(svgUrl, href, format, name);
+        return this.downloadImg(href, format, name);
+      });
+    } else {
+      this.downloadImg(svgUrl, format, name);
+    }
+  }
+
+  getOuterHTML(format) {
+    if (format !== "png") {
+      return this.svgRef.current.outerHTML;
+    } else {
+      const svgCopy = this.svgRef.current.cloneNode(true);
+      svgCopy.setAttributeNS(null, "width", `${window.innerWidth}px`);
+      svgCopy.setAttributeNS(null, "height", `${window.innerHeight}px`);
+      return svgCopy.outerHTML;
+    }
+  }
+
+  convertToPNG(svgUrl) {
+    return new Promise((resolve, reject) => {
+      const img = new Image();
+      img.addEventListener("load", ev => {
+        console.log("www");
+      });
+      img.onload = () => {
+        const canvas = document.createElement("canvas");
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+        const context = canvas.getContext("2d");
+        context.drawImage(img, 0, 0);
+        const href = canvas.toDataURL("image/png");
+        resolve(href);
+      };
+      img.src = svgUrl;
+      console.log(svgUrl);
+    });
+  }
+
+  downloadImg(href, format, name) {
+    const downloadLink = document.createElement("a");
+    downloadLink.download = `${name}.${format}`;
+    downloadLink.href = href;
+    document.body.appendChild(downloadLink);
+    downloadLink.onclick = function(e) {
+      setTimeout(() => {
+        console.log("revoke");
+        URL.revokeObjectURL(this.href);
+      }, 1500);
+    };
+    downloadLink.click();
+    document.body.removeChild(downloadLink);
+  }
+
   render() {
     return (
       <div className="svg-container">
+        <a onClick={this.savePMG} href="#" className="m-4">
+          Save PNG
+        </a>
+        <a onClick={this.saveSVG} href="#" className="m-4">
+          Save SVG
+        </a>
         <Cursor debug={true} />
         <svg
-          viewBox="0 0 500 500"
+          data-name="Layer 1"
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox={`0 0 ${window.innerWidth} ${window.innerHeight}`}
           onMouseDown={this.mouseOrTouchDown}
           // onTouchStart={this.mouseOrTouchUp}
           onMouseUp={this.mouseOrTouchUp}

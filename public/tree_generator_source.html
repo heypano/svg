@@ -1,0 +1,496 @@
+<!DOCTYPE html>
+<meta name="robots" content="noindex">
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width">
+  <title>JS Bin</title>
+<style id="jsbin-css">
+html {
+  box-sizing: border-box;
+}
+
+*, *:before, *:after {
+  box-sizing: inherit;
+}
+
+html, body {
+  margin: 0;
+  padding: 0;
+}
+
+button {
+  color: #fff;
+  background-color: #417cb8;
+  border: none;
+}
+
+button:hover {
+  background-color: #346392;
+}
+
+button:focus {
+  outline:none;
+}
+
+button:active {
+  background-color: #27496d;
+  border: none;
+}
+
+
+main {
+  width: 80vw;
+  margin: 0 auto;
+}
+
+#svg {
+  width: inherit;
+  border: 5px solid #222222;
+}
+
+#buttons {
+  display: flex;
+  justify-content: space-between;
+  flex-flow: row wrap;
+}
+
+#buttons button {
+  height: 50px;
+  width: 150px;
+  font-size: 1.05em;
+}
+
+
+#save {
+  display: flex;
+  align-items: center;
+}
+
+#save button {
+  margin-left: 4px;
+}
+
+#save input {
+  height: 40px;
+  width: 160px;
+  font-size: 1.2em;
+}
+
+#save input:focus {
+  outline: none;
+}
+
+@media screen and (max-width: 1165px) {
+  #buttons {
+    flex-flow: column wrap;
+    align-items: center;
+  }
+  
+  #buttons button {
+    margin-top: 10px;
+    margin-bottom: 10px;
+  }
+ 
+  #save {
+    flex-wrap: wrap;
+    width: 458px;
+    justify-content: space-between;
+  }
+  
+  #save button {
+    margin-left: 0;
+  }
+  
+  #save input {
+    width: inherit;
+  }
+}
+
+@media screen and (max-width: 575px) {
+  #buttons button, #save {
+    width: 80vw;
+    margin: 5px 0px;
+  }
+  #save input {
+    margin-top: 5px;
+    margin-bottom: 10px;
+  }
+}
+
+.closed {
+  display: none;
+} 
+
+#modal {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: #eee;
+  height: 80px;
+  max-height: 100%;
+  width: 270px;
+  max-width: 100%;
+  z-index: 2;
+  animation: slidein 0.3s;
+}
+
+@keyframes slidein {
+  0% {
+    opacity: 0;
+    transform: translate(-50%, 400%);
+  }
+  100% {
+    opacity: 1;
+    transform: translate(-50%, -50%);
+  }
+}
+
+#modal-inside {
+  display: flex;
+  flex-flow: column nowrap;
+  align-items: center;
+  padding: 10px;
+}
+
+#modal-inside button {
+  height: 20px;
+  width: 70px;
+  margin: 5px 3px;
+}
+
+#modal-inside input {
+  width: 80px;
+  font-size: 1.5em;
+}
+
+#modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.5);
+  z-index: 1;
+}
+
+
+
+
+
+</style>
+</head>
+<body>
+  <main>
+    <svg id="svg" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1366.01 768">
+      <title>mountain</title>
+      <rect id="outerRect" x="0.01" width="1366" height="768" fill="#bbdff9"/>
+      <path d="M1364.32,624.07c-.06-4.8-.29-9.6-.31-14.4a4.52,4.52,0,0,1,2-4v-90l-192.45-395L923.26,507.79,726.83,94.9,494.49,466.1,228.25,106.81,2,437.9q-1,2.21-2,4.49H0V566q.5,1.45,1,2.86l82.66.43,179.49-4L512.44,611l226.35,5,227.35-3,398.23,13.84A5.77,5.77,0,0,1,1364.32,624.07Z" transform="translate(0.01)" fill="#939393"/><ellipse cx="350.01" cy="580.5" rx="350" ry="187.5" fill="#6bbc37"/>
+      <ellipse cx="1042.01" cy="595" rx="324" ry="173" fill="#6bbc37"/>
+      <ellipse cx="757.51" cy="594.5" rx="456.5" ry="172.5" fill="#6bbc37"/>
+      <g id="terrain">
+        <rect x="0.01" y="590" width="1366" height="178" fill="#74ce3a"/>
+        <ellipse cx="441.01" cy="613" rx="441" ry="155" fill="#74ce3a"/>
+        <ellipse cx="985.51" cy="601.5" rx="380.5" ry="165.5" fill="#74ce3a"/>
+      </g>
+      <path d="M120,264,227.87,107,338,252.1l-55.67-33.27-5.14,24-27.74-20-13.36,12h0c7.19-13-7.19-27-7.19-27L199.1,244.8l-24.66-21-3.08,27-22.61-7Z" transform="translate(0.01)" fill="#f4f4f4"/>
+      <polygon points="619.57 264 727.2 95 809.01 264 760.88 215.83 754.76 263.77 728.22 217.83 713.93 235.81 683.3 249.79 683.3 215.83 654.72 243.79 619.57 264" fill="#f4f4f4"/>
+      <polygon points="1093.01 244.61 1175.6 113 1247.01 264 1205.42 225.8 1182.8 255.32 1170.46 215.26 1139.62 246.89 1139.62 217.37 1093.01 244.61" fill="#f4f4f4"/>
+      <circle cx="120.51" cy="102.5" r="55.5" fill="#eae247"/>
+      <circle cx="474.51" cy="124.5" r="49.5" fill="#f2f2f2"/>
+      <circle cx="427.01" cy="160" r="47" fill="#f2f2f2"/>
+      <circle cx="508.51" cy="128.5" r="33.5" fill="#f2f2f2"/>
+      <circle cx="480.01" cy="186" r="44" fill="#f2f2f2"/>
+      <circle cx="856.01" cy="119" r="44" fill="#f2f2f2"/>
+      <circle cx="887.51" cy="77.5" r="38.5" fill="#f2f2f2"/>
+      <circle cx="905.01" cy="135" r="40" fill="#f2f2f2"/>
+      <circle cx="936.51" cy="97.5" r="36.5" fill="#f2f2f2"/>
+      <circle cx="91.01" cy="85" r="4" fill="#3a3a3a"/>
+      <circle cx="152.01" cy="85" r="4" fill="#3a3a3a"/>
+      <path d="M91,118s25,40,63-2" transform="translate(0.01)" fill="#3a3a3a"/>
+      <defs>
+        <g id="pine">
+          <path d="M63 66 H0 L31.5 0Z" fill="#1da831"/>
+        </g>
+        <g id="oak">
+          <rect x="20" y="40" width="10" height="40" fill="#382a16"/>
+          <ellipse cx="10" cy="30" rx="10" ry="10" fill="#4d8436"/>
+          <ellipse cx="20" cy="40" rx="15" ry="15" fill="#4d8436"/>
+          <ellipse cx="30" cy="20" rx="20" ry="20" fill="#4d8436"/>
+          <ellipse cx="40" cy="35" rx="10" ry="10" fill="#4d8436"/>
+      </g>
+      </defs>
+    </svg>
+    <div id="buttons">
+      <div id="treeButtons">
+        <button id="pineButton">Add pine trees</button>
+        <button id="oakButton">Add oak trees</button>  
+        <button id="removeTrees">Remove all trees</button>
+      </div>
+      <div id="save">
+        <input type="text" id="fileName" placeholder="Enter file name">
+        <button data-format="svg">Download SVG</button>
+        <button id='png' data-format="prepng">Download PNG</button>
+      </div>
+    </div>
+  </main>
+  <div id="modal" class="modal closed">
+    <div id="modal-inside">
+      <span>
+        <input type="number" id="png-width">
+        x
+        <input type="number" id="png-height">
+      </span>
+      <span>
+        <button id="reset">Reset</button>
+        <button id="download-png" class="modal-button" data-format="png">Download</button>
+        <button class="modal-button">Cancel</button>        
+      </span>
+    </div>
+  </div>
+  <div id="modal-overlay" class="model closed"></div>
+  <script id="jsbin-javascript">
+document.addEventListener('DOMContentLoaded', function() {
+  const treeButtons = document.querySelectorAll('#treeButtons button');
+  const outerRect = document.getElementById('outerRect');
+  const terrain = document.getElementById('terrain');
+  const MAX_WIDTH = +outerRect.getAttributeNS(null, 'width');
+  const MAX_HEIGHT = +outerRect.getAttributeNS(null, 'height');
+  const MIN_HEIGHT = +terrain.querySelector('rect').getAttributeNS(null, 'y');
+  const pineElement = document.querySelector('#pine path');
+  const oakElement = document.querySelector('#oak');
+  const saveButtons = document.querySelectorAll('#save button');
+  const modalButtons = document.querySelectorAll('#modal-inside .modal-button');
+  const downloadPNGButton = document.getElementById('download-png');
+  const resetButton = document.getElementById('reset');
+  treeGenerator.init(outerRect, terrain, MAX_WIDTH, MAX_HEIGHT, MIN_HEIGHT, pineElement, oakElement);
+  
+  for(const prop of treeButtons) {
+    prop.addEventListener('click', drawTrees);
+  }
+  
+  for(const prop of saveButtons) {
+    prop.addEventListener('click', saveImg);
+  }
+  
+  for(const prop of modalButtons) {
+    prop.addEventListener('click', popModal);
+  }
+  
+  downloadPNGButton.addEventListener('click', saveImg);
+  
+  resetButton.addEventListener('click', function() {
+    resetSize(MAX_WIDTH, MAX_HEIGHT)
+  });
+  
+  resetSize(MAX_WIDTH, MAX_HEIGHT);
+  
+  
+});
+
+function resetSize(width, height) {
+  const widthInput = document.getElementById('png-width');
+  const heightInput = document.getElementById('png-height');
+  widthInput.value = width;
+  heightInput.value = height;
+}
+
+
+function drawTrees() {
+  switch(this.id) {
+     case 'pineButton':
+        treeGenerator.createPines();
+        break;
+      case 'oakButton':
+        treeGenerator.createOaks();
+        break;
+      case 'removeTrees':
+        treeGenerator.removeAllTrees();
+        break;
+      default: 
+        return;      
+  }
+}
+
+function saveImg() {
+  const { format } = this.dataset;
+  if (format === 'prepng') {
+    popModal();
+  }
+  else {
+    const name = document.getElementById('fileName').value;
+    const svgData = document.getElementById('svg');
+    const width = document.getElementById('png-width').value;
+    const height = document.getElementById('png-height').value;
+    imageSaver.save(name, format, svgData, width, height);  
+  }
+}
+
+function popModal() {
+  const modal = document.getElementById('modal');
+  const modalOverlay = document.getElementById('modal-overlay');
+  modal.classList.toggle('closed');
+  modalOverlay.classList.toggle('closed');
+}
+
+const treeGenerator = {
+  init(outerRect, terrain, MAX_WIDTH, MAX_HEIGHT, MIN_HEIGHT, pineElement, oakElement) {
+    this.outerRect = outerRect;
+    this.terrain = terrain;
+    this.MAX_WIDTH = MAX_WIDTH;
+    this.MAX_HEIGHT= MAX_HEIGHT;
+    this.MIN_HEIGHT = MIN_HEIGHT;
+    this.pineElement = pineElement;
+    this.oakElement = oakElement;
+    this.myTrees = [];
+  },
+  
+  createOaks() {
+    for(let i = 0 ; i < 20 ; i++) {
+      const x = this.getRandom(this.MAX_WIDTH, 1);
+      const y = this.getRandom(this.MAX_HEIGHT, this.MIN_HEIGHT) - 80;
+      const newElement = this.oakElement.cloneNode(true);
+      newElement.removeAttributeNS(null, 'id');
+      this.setSVGAttributes(newElement, {class: 'generated-oak', 'data-yaxis': y + 40});
+      const rect = newElement.getElementsByTagName('rect')[0];
+      this.setSVGAttributes(rect, {x: x, y: y});
+      const ellipses = newElement.getElementsByTagName('ellipse');
+      for(let i = 0 ; i < ellipses.length ; i++) {
+        this.setSVGAttributes(ellipses[i], {cx: ((i + 1) * 10) + x - 20, 
+                                       cy: this.getRandom(y - 10, y + 10)});
+      }
+      this.myTrees.push(newElement);
+    }
+    const sortedTrees = this.orderByYAxis(this.myTrees);
+    this.appendTreesInOrder(sortedTrees);
+  },
+  
+  createPines() {
+    for(let i = 0 ; i < 20 ; i++) {
+      const x = this.getRandom(this.MAX_WIDTH, 1) + 50;
+      const y = this.getRandom(this.MAX_HEIGHT, this.MIN_HEIGHT);
+      const pineClone = this.pineElement.cloneNode();
+      const randomWidth = this.getRandom(100, 50);
+      this.setSVGAttributes(pineClone, {d: 
+                                   `M${x} ${y} 
+                                    H${x - randomWidth}
+                                    L${x - (randomWidth / 2)} ${y - (randomWidth * 2)} 
+                                    Z`,
+                                  class: 'generated-pine',
+                                  'data-yaxis': y });
+      this.myTrees.push(pineClone);
+    }
+    const sortedTrees = this.orderByYAxis(this.myTrees);
+    this.appendTreesInOrder(sortedTrees)
+  },
+  
+  appendTreesInOrder(trees) {
+    for(const prop of trees) {
+      this.terrain.appendChild(prop);
+    }
+  },
+  
+  removeAllTrees() {
+    for(const prop of this.myTrees) {
+      this.terrain.removeChild(prop);
+    }
+    this.myTrees.length = 0;
+  },
+  
+  setSVGAttributes(element, obj) {
+    for(const prop in obj) {
+      element.setAttributeNS(null, prop, obj[prop]);
+    }
+  },
+  
+  getRandom(max, min) {
+    return Math.floor(Math.random() * (max - min + 1)) + min;
+  },
+  
+  orderByYAxis(trees) {
+    const sortedTrees = trees.sort(function(a, b) {
+      const ay = a.dataset.yaxis;
+      const by = b.dataset.yaxis;
+      return ay - by;
+    });
+    return sortedTrees;
+  }
+}
+
+const imageSaver = {
+  save(name, format, svgData, width, height) {
+    this.name = name;
+    this.format = format;
+    this.svgData = svgData;
+    this.width = width;
+    this.height = height;
+    this.parseImage();
+  },
+  
+  setDimensions() {
+    if (this.format !== 'png') {
+      return this.svgData.outerHTML;
+    } else {
+      const svgCopy = this.svgData.cloneNode(true);
+      svgCopy.setAttributeNS(null, 'width', this.width);
+      svgCopy.setAttributeNS(null, 'height', this.height);
+      return svgCopy.outerHTML;  
+    }
+  },
+  
+  parseImage() {
+    if (this.name.length < 1) {
+      this.name = 'unnamed';
+    }
+    const sizedSVG = this.setDimensions();
+    const svgBlob = new Blob([sizedSVG], {type:"image/svg+xml"});
+    const svgUrl = URL.createObjectURL(svgBlob);
+    if (this.format === 'png') {
+      this.convertToPNG(svgUrl)
+        .then(href => this.downloadImg(href));
+    } else {
+      this.downloadImg(svgUrl);
+    }
+  },
+  
+  convertToPNG(svgUrl) {
+    return new Promise((resolve, reject) => {
+      const img = new Image();
+      img.src = svgUrl;
+      img.onload = (() => {
+        const canvas = document.createElement('canvas');
+        canvas.width = this.width;
+        canvas.height = this.height;
+        const context = canvas.getContext('2d');
+        context.drawImage(img, 0, 0);
+        const href = canvas.toDataURL('image/png');
+        resolve(href);
+      });
+    });    
+  }, 
+  
+  downloadImg(href) {
+    const downloadLink = document.createElement('a');
+    downloadLink.download = `${this.name}.${this.format}`;
+    downloadLink.href = href;
+    document.body.appendChild(downloadLink);
+    downloadLink.onclick = function(e) {
+      setTimeout(() => {
+        URL.revokeObjectURL(this.href);
+      }, 1500)
+    }
+    downloadLink.click();
+    document.body.removeChild(downloadLink);    
+  }
+  
+}
+
+
+
+
+
+
+</script>
+</body>
+</html>

@@ -140,11 +140,13 @@ const CatPath = ({ className }) => (
     />
     <path
       className="catPath2"
+      id="rightPupil"
       d="M79.4,90.52621A7.03735,7.03735,0,0,0,83.41649,94.211a15.40348,15.40348,0,0,0,5.5015.87137c2.23183.02579,5.702.00937,7.46527-1.65124,2.82979-2.66751,4.249-7.92922,2.236-11.41674a11.50048,11.50048,0,0,0-3.94069-3.46084C88.18727,75.371,75.79025,81.69516,79.4,90.52621Z"
       transform="translate(-22.59429 -14.13801)"
     />
     <path
       className="catPath2"
+      id="leftPupil"
       d="M46.9,82.77621A7.03735,7.03735,0,0,0,50.91649,86.461a15.40348,15.40348,0,0,0,5.5015.87137c2.23183.02579,8.88558-3.089,8.88558-9.02882a9.60753,9.60753,0,0,0-4.5-8.5C54.31227,66.621,43.29025,73.94516,46.9,82.77621Z"
       transform="translate(-22.59429 -14.13801)"
     />
@@ -169,10 +171,12 @@ const CatPath = ({ className }) => (
       transform="translate(-22.59429 -14.13801)"
     />
     <path
+      id="rightEye"
       d="M94.7863,78.83287a18.39366,18.39366,0,0,0-4.47571-.67523c-.35272.06573-.701.14715-1.04877.23065,1.23493,1.32019.68109,4.09845-1.66656,4.09845a2.28613,2.28613,0,0,1-2.28809-2.66236c-.06256.03144-.12585.05591-.18835.0882a5.18916,5.18916,0,0,1-2.04962.545,13.99811,13.99811,0,0,0-.14063,1.971c0,5.15466,2.76093,9.33331,6.16669,9.33331s6.16662-4.17865,6.16662-9.33331A13.54347,13.54347,0,0,0,94.7863,78.83287Z"
       transform="translate(-22.59429 -14.13801)"
     />
     <path
+      id="leftEye"
       d="M64.77788,75.11882l-.00849-.014a2.17865,2.17865,0,0,1-2.17413,1.54852c-3.05945,0-3.07379-4.70538-.06531-4.77649-.15509-.15618-.30786-.31463-.46222-.47412-.04651-.048-.06726-.07281-.09692-.10571-.2627-.15662-.51984-.32544-.78394-.48108-.05981-.01233-.13782-.03155-.25415-.066a5.014,5.014,0,0,1-2.26416-1.40887,11.47861,11.47861,0,0,0-3.10864,2.23511c-3.08807,3.08813-3.98114,7.2019-1.99457,9.18841s6.10028,1.09357,9.18842-1.99457a11.38485,11.38485,0,0,0,2.30389-3.26556A4.36569,4.36569,0,0,1,64.77788,75.11882Z"
       transform="translate(-22.59429 -14.13801)"
     />
@@ -187,6 +191,31 @@ class Cat extends React.Component {
     this.drawPoint = throttle(25, this.drawPoint.bind(this));
     this.drawMove = this.drawMove.bind(this);
     this.svgRef = React.createRef();
+  }
+
+  componentDidMount() {
+    // document.onmousemove = this.documentMouseMove.bind(this);
+  }
+
+  documentMouseMove(event) {
+    const eyeBall = document.getElementById("rightEye");
+    const pupil = document.getElementById("rightPupil");
+
+    const eyeArea = eyeBall.getBoundingClientRect();
+    const pupilArea = pupil.getBoundingClientRect();
+
+    const R = eyeArea.width / 2;
+    const r = pupilArea.width / 2;
+    const centerX = eyeArea.left + R;
+    const centerY = eyeArea.top + R;
+    const x = event.clientX - centerX;
+    const y = event.clientY - centerY;
+    const theta = Math.atan2(y, x);
+    const angle = (theta * 180) / Math.PI + 360;
+
+    pupil.style.transform = `translateX(${R - r + "px"}) rotate(${angle +
+      "deg"})`;
+    pupil.style.transformOrigin = `${r + "px"} center`;
   }
 
   /**
