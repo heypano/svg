@@ -8,7 +8,7 @@ import {
   setIsDrawing,
   setIsNotDrawing
 } from "../redux/features/cursor/cursorSlice";
-import { throttle } from "throttle-debounce";
+import { debounce, throttle } from "throttle-debounce";
 
 const MaskPath = ({ className }) => (
   <path
@@ -188,7 +188,7 @@ class Cat extends React.Component {
     super(props);
     this.mouseOrTouchUp = this.mouseOrTouchUp.bind(this);
     this.mouseOrTouchDown = this.mouseOrTouchDown.bind(this);
-    this.drawPoint = throttle(25, this.drawPoint.bind(this));
+    this.drawPoint = throttle(25, true, this.drawPoint.bind(this));
     this.drawMove = this.drawMove.bind(this);
     this.svgRef = React.createRef();
   }

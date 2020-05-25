@@ -170,12 +170,18 @@ class Paths extends React.Component {
   render() {
     return (
       <div className="svg-container">
-        <a onClick={this.savePMG} href="#" className="m-4">
-          Save PNG
-        </a>
-        <a onClick={this.saveSVG} href="#" className="m-4">
-          Save SVG
-        </a>
+        <div
+          style={{
+            position: "fixed"
+          }}
+        >
+          <a onClick={this.savePMG} href="#" className="m-4">
+            Save PNG
+          </a>
+          <a onClick={this.saveSVG} href="#" className="m-4">
+            Save SVG
+          </a>
+        </div>
         <Cursor debug={true} />
         <svg
           data-name="Layer 1"

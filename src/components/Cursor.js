@@ -12,12 +12,26 @@ import {
   setPreviousTool,
   setNextTool
 } from "../redux/features/cursor/cursorSlice";
-import { throttle } from "throttle-debounce";
+import { debounce, throttle } from "throttle-debounce";
 
 class Cursor extends React.Component {
   constructor(props) {
     super(props);
-    this.throttledSetPosition = throttle(25, this.props.setPosition.bind(this));
+    this.throttledSetPosition = throttle(
+      25,
+      true,
+      this.props.setPosition.bind(this)
+    );
+    this.throttledSetPreviousTool = debounce(
+      50,
+      true,
+      this.props.setPreviousTool.bind(this)
+    );
+    this.throttledSetNextTool = debounce(
+      50,
+      true,
+      this.props.setNextTool.bind(this)
+    );
   }
   componentDidMount() {
     document.onmousemove = this.onMouseMove.bind(this);
@@ -38,10 +52,10 @@ class Cursor extends React.Component {
   onKeyUp(event) {
     switch (event.which) {
       case 37:
-        this.props.setPreviousTool();
+        this.throttledSetPreviousTool();
         break;
       case 39:
-        this.props.setNextTool();
+        this.throttledSetNextTool();
         break;
     }
   }
@@ -51,9 +65,9 @@ class Cursor extends React.Component {
       const { deltaY } = event;
 
       if (deltaY > 0) {
-        this.props.setPreviousTool();
+        this.throttledSetPreviousTool();
       } else {
-        this.props.setNextTool();
+        this.throttledSetNextTool();
       }
     }
   }
