@@ -107,7 +107,7 @@ class Paths extends React.Component {
   }
 
   saveImage(format) {
-    const name = "unnamed";
+    const name = "some-abstract-shit";
     const sizedSVG = this.getOuterHTML(format);
     const svgBlob = new Blob([sizedSVG], { type: "image/svg+xml" });
     const svgUrl = URL.createObjectURL(svgBlob);
