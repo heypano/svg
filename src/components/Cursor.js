@@ -22,7 +22,8 @@ class Cursor extends React.Component {
   componentDidMount() {
     document.onmousemove = this.onMouseMove.bind(this);
     document.onwheel = this.onWheel.bind(this);
-    document.onMouseDown = this.onMouseDown.bind(this);
+    document.onmousedown = this.onMouseDown.bind(this);
+    document.onkeyup = this.onKeyUp.bind(this);
   }
   onMouseMove(event) {
     const { clientX: x, clientY: y } = event;
@@ -34,6 +35,16 @@ class Cursor extends React.Component {
     }
   }
   onMiddleClick(event) {}
+  onKeyUp(event) {
+    switch (event.which) {
+      case 37:
+        this.props.setPreviousTool();
+        break;
+      case 39:
+        this.props.setNextTool();
+        break;
+    }
+  }
   onWheel(event) {
     // Do not mess with non zero tool stages
     if (this.props.toolStage == 0) {
