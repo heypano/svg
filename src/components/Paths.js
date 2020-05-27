@@ -188,7 +188,7 @@ class Paths extends React.Component {
           xmlns="http://www.w3.org/2000/svg"
           viewBox={`0 0 ${window.innerWidth} ${window.innerHeight}`}
           onMouseDown={this.mouseOrTouchDown}
-          // onTouchStart={this.mouseOrTouchUp}
+          onTouchStart={this.mouseOrTouchDown}
           onMouseUp={this.mouseOrTouchUp}
           // onTouchEnd={this.mouseOrTouchUp}
           // onMouseMove={this.drawMove}

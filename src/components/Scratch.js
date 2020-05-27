@@ -85,7 +85,7 @@ class Scratch extends React.Component {
         <Cursor debug={false} />
         <svg
           onMouseDown={this.mouseOrTouchDown}
-          // onTouchStart={this.mouseOrTouchUp}
+          onTouchStart={this.mouseOrTouchDown}
           onMouseUp={this.mouseOrTouchUp}
           // onTouchEnd={this.mouseOrTouchUp}
           onMouseMove={this.drawMove}
