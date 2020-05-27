@@ -75,7 +75,10 @@ class Scratch extends React.Component {
     this.drawPoint(x, y);
   }
   mouseOrTouchUp(event) {
+    const svg = this.svgRef.current;
+    const [x, y] = getPointInSvgFromEvent(svg, event);
     this.props.setIsNotDrawing();
+    this.props.addPoint({ type: "Z", x, y });
   }
 
   render() {
@@ -128,14 +131,23 @@ class Scratch extends React.Component {
 
 const getPathFromPoints = points => {
   return points.reduce((path, point, index) => {
-    const { x, y } = point;
+    const { x, y, type } = point;
     if (index == 0) {
       return `M ${x} ${y}`;
-    } else if (index < points.length - 1) {
-      const { x: x2, y: y2 } = points[index + 1];
-      return `${path} C ${x} ${y} ${x} ${y} ${x2} ${y2} `;
     } else {
-      return path;
+      const { type: lastType } = points[index - 1];
+      if (type == "Z") {
+        return `${path} Z `;
+      } else if (index < points.length - 1) {
+        const { x: x2, y: y2 } = points[index + 1];
+        if (lastType == "Z") {
+          return `${path} M ${x} ${y} C ${x} ${y} ${x} ${y} ${x2} ${y2} `;
+        } else {
+          return `${path} C ${x} ${y} ${x} ${y} ${x2} ${y2} `;
+        }
+      } else {
+        return path;
+      }
     }
   }, "");
 };

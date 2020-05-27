@@ -125,7 +125,7 @@ const cursorSlice = createSlice({
     addPoint(state, action) {
       const { currentTool } = state;
       const { x, y, type = 0, stage = 0 } = action.payload;
-      const { stages, disallowDupes } = state.tools[type];
+      const { stages, disallowDupes } = state.tools[type] || {};
       state.points.push({ x, y, type: type, stage: stage });
       if (state.toolStage < stages - 1) {
         state.toolStage++;
