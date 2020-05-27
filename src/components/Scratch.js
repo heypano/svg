@@ -113,25 +113,32 @@ class Scratch extends React.Component {
           </clipPath>
 
           <g clipPath={`url(#mask)`}>
-            {this.props.points.map((position, index) => {
-              const size = 50;
-              const { x, y } = position;
-              return (
-                <circle
-                  cx={x}
-                  cy={y}
-                  r={size}
-                  key={index}
-                  fill="url(#GradientReflect)"
-                />
-              );
-            })}
+            <path
+              d={getPathFromPoints(this.props.points)}
+              strokeWidth={60}
+              fill="transparent"
+              stroke="grey"
+            />
           </g>
         </svg>
       </div>
     );
   }
 }
+
+const getPathFromPoints = points => {
+  return points.reduce((path, point, index) => {
+    const { x, y } = point;
+    if (index == 0) {
+      return `M ${x} ${y}`;
+    } else if (index < points.length - 1) {
+      const { x: x2, y: y2 } = points[index + 1];
+      return `${path} C ${x} ${y} ${x} ${y} ${x2} ${y2} `;
+    } else {
+      return path;
+    }
+  }, "");
+};
 
 const mapStateToProps = state => ({
   points: selectPoints(state),
