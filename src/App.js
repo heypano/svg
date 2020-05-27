@@ -3,6 +3,7 @@ import Wrong from "./components/Wrong";
 import Circle from "./components/Circle";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import Cloud from "./components/Cloud";
+import Window from "./components/Window";
 import "./final.css";
 import Cat from "./components/Cat";
 import Test from "./components/Test";
@@ -27,6 +28,7 @@ function App() {
             <Route exact path="/draw" component={Draw} />
             <Route exact path="/paths" component={Paths} />
             <Route exact path="/scratch" component={Scratch} />
+            <Route exact path="/window" component={Window} />
           </Switch>
         </div>
       </Router>

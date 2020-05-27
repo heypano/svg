@@ -77,6 +77,10 @@ const cursorSlice = createSlice({
   initialState: {
     x: 0,
     y: 0,
+    custom: {
+      x: 0,
+      y: 0
+    },
     isDrawing: false,
     currentTool: 0,
     toolStage: 0,
@@ -104,6 +108,11 @@ const cursorSlice = createSlice({
       const { x, y } = payload;
       state.x = x;
       state.y = y;
+    },
+    setCustomPosition(state, { payload }) {
+      const { x, y } = payload;
+      state.custom.x = x;
+      state.custom.y = y;
     },
     setPositionX(state, { payload }) {
       const x = payload;
@@ -149,6 +158,13 @@ export const selectCursorPosition = createSelector(
     y: cursor.y
   })
 );
+export const selectCustomPosition = createSelector(
+  state => state[name].custom,
+  cursor => ({
+    x: cursor.x,
+    y: cursor.y
+  })
+);
 
 export const selectIsDrawing = createSelector(
   state => state[name],
@@ -173,6 +189,7 @@ export const selectTools = createSelector(
 
 export const {
   setPosition,
+  setCustomPosition,
   setPositionX,
   setPositionY,
   addPoint,
