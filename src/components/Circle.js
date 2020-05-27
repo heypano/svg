@@ -1,4 +1,4 @@
-import { getRandomColor } from "../util";
+import { getRandomColorHSL } from "../util";
 import React, { useEffect, useRef, useState } from "react";
 
 const config = {
@@ -110,7 +110,7 @@ export function getAllPointsInCircle(numOfPoints, radius, offset) {
  * @param e
  */
 function onLineClicked(e) {
-  e.target.style.stroke = getRandomColor();
+  e.target.style.stroke = getRandomColorHSL();
 }
 
 /**

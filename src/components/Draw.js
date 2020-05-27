@@ -1,7 +1,7 @@
 import { getPointInSvgFromEvent } from "../util";
 import React from "react";
 import { throttle } from "throttle-debounce";
-import { getRandomColor } from "../util";
+import { getRandomColorHSL } from "../util";
 
 class Draw extends React.Component {
   constructor(props) {
@@ -85,7 +85,7 @@ class Draw extends React.Component {
                   cy={y}
                   r={25}
                   key={index}
-                  fill={getRandomColor()}
+                  fill={getRandomColorHSL()}
                 />
               );
             })}

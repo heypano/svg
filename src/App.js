@@ -10,6 +10,7 @@ import Draw from "./components/Draw";
 import Paths from "./components/Paths";
 import { Provider } from "react-redux";
 import store from "./redux/store";
+import Scratch from "./components/Scratch";
 
 function App() {
   return (
@@ -25,6 +26,7 @@ function App() {
             <Route exact path="/test" component={Test} />
             <Route exact path="/draw" component={Draw} />
             <Route exact path="/paths" component={Paths} />
+            <Route exact path="/scratch" component={Scratch} />
           </Switch>
         </div>
       </Router>

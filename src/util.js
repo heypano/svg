@@ -2,10 +2,10 @@
  * Return a random color in RGB
  * @returns {string}
  */
-export function getRandomColor() {
-  const c1 = getRandomColorNumber();
-  const c2 = getRandomColorNumber();
-  const c3 = getRandomColorNumber();
+export function getRandomColorRGB() {
+  const c1 = getRandomColorNumberRGB();
+  const c2 = getRandomColorNumberRGB();
+  const c3 = getRandomColorNumberRGB();
   return `rgb(${c1},${c2},${c3})`;
 }
 
@@ -13,8 +13,25 @@ export function getRandomColor() {
  * Return a random number from 0 to 255
  * @returns {number}
  */
-export function getRandomColorNumber() {
+export function getRandomColorNumberRGB() {
   return Math.floor(Math.random() * Math.floor(256));
+}
+
+/**
+ * Return a random color in HSLA
+ * @returns {string}
+ */
+export function getRandomColorHSL() {
+  const hue = getRandomHueHSL();
+  return `hsl(${getRandomHueHSL()}, 80%, 50%)`;
+}
+
+/**
+ * Return a random number from 0 to 255
+ * @returns {number}
+ */
+export function getRandomHueHSL() {
+  return Math.floor(Math.random() * Math.floor(360));
 }
 
 /**

@@ -1,7 +1,7 @@
 import { getPointInSvgFromEvent } from "../util";
 import React from "react";
 import { throttle } from "throttle-debounce";
-import { getRandomColor } from "../util";
+import { getRandomColorHSL } from "../util";
 import Mark from "./Mark";
 import { addPoint, selectPoints } from "../redux/features/cursor/cursorSlice";
 import Cursor from "./Cursor";
