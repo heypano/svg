@@ -83,6 +83,7 @@ class Scratch extends React.Component {
 
   render() {
     const padding = 50;
+    let text = this.props.match ? this.props.match.params.text : null;
     return (
       <div className="svg-container">
         <Cursor debug={false} />
@@ -112,7 +113,17 @@ class Scratch extends React.Component {
             </radialGradient>
           </defs>
           <clipPath id="mask">
-            <MaskPaths />
+            {text ? (
+              <text
+                fontSize={window.innerHeight / 9}
+                x={window.innerWidth / 9}
+                y={window.innerHeight / 9}
+              >
+                {atob(text)}
+              </text>
+            ) : (
+              <MaskPaths />
+            )}
           </clipPath>
 
           <g clipPath={`url(#mask)`}>
@@ -136,11 +147,11 @@ const getPathFromPoints = points => {
       return `M ${x} ${y}`;
     } else {
       const { type: lastType } = points[index - 1];
-      if (type == "Z") {
-        return `${path} Z `;
-      } else if (index < points.length - 1) {
+      if (index < points.length - 1) {
         const { x: x2, y: y2 } = points[index + 1];
         if (lastType == "Z") {
+          return `${path} Z `;
+        } else if (type == "Z") {
           return `${path} M ${x} ${y} C ${x} ${y} ${x} ${y} ${x2} ${y2} `;
         } else {
           return `${path} C ${x} ${y} ${x} ${y} ${x2} ${y2} `;

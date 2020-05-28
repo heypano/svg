@@ -28,6 +28,7 @@ function App() {
             <Route exact path="/draw" component={Draw} />
             <Route exact path="/paths" component={Paths} />
             <Route exact path="/scratch" component={Scratch} />
+            <Route exact path="/scratch/:text" component={Scratch} />
             <Route exact path="/window" component={Window} />
           </Switch>
         </div>
