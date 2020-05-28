@@ -10,6 +10,8 @@ import {
 } from "../redux/features/cursor/cursorSlice";
 import { debounce, throttle } from "throttle-debounce";
 
+const strokeWidth = 60;
+
 const MaskPaths = ({ className }) => {
   const widthChunk = window.innerWidth / 4;
   const heightChunk = window.innerHeight / 4;
@@ -117,7 +119,7 @@ class Scratch extends React.Component {
               <text
                 fontSize={window.innerHeight / 9}
                 x={window.innerWidth / 9}
-                y={window.innerHeight / 4}
+                y={window.innerHeight / 6}
               >
                 {b64DecodeUnicode(text)}
               </text>
@@ -129,7 +131,7 @@ class Scratch extends React.Component {
           <g clipPath={`url(#mask)`}>
             <path
               d={getPathFromPoints(this.props.points)}
-              strokeWidth={60}
+              strokeWidth={strokeWidth}
               fill="transparent"
               stroke="grey"
             />
@@ -143,22 +145,40 @@ class Scratch extends React.Component {
 const getPathFromPoints = points => {
   return points.reduce((path, point, index) => {
     const { x, y, type } = point;
-    if (index == 0) {
-      return `M ${x} ${y}`;
+    const isNotLastPoint = index < points.length - 1;
+    const isNotFirstPoint = index > 0;
+    const previousPoint = isNotFirstPoint ? points[index - 1] : {};
+    const { x: x0, y: y0, type: lastType } = previousPoint;
+    const nextPoint = isNotLastPoint ? points[index + 1] : {};
+    const { x: x2, y: y2, type: nextType } = nextPoint;
+    const needToOpen = index == 0 || lastType == "Z";
+    const isSameAsLast = x0 == x && y0 == y;
+    let r = strokeWidth / 4;
+
+    if (needToOpen) {
+      return `${path} M ${x} ${y}`;
+    } else if (isSameAsLast) {
+      return `${path} L ${x + 5} ${y0 + 5}`;
+      // https://www.smashingmagazine.com/2019/03/svg-circle-decomposition-paths/
+      // http://xahlee.info/js/svg_circle_arc.html
+      /**
+       * M (CX - R), CY
+       *   a R,R 0 1,0 (R * 2),0
+       *   a R,R 0 1,0 -(R * 2),0
+       */
+      // return `${path} M ${x - r}, ${y}
+      //                 a ${r}, ${r} 0 1,0 ${r * 2},0
+      //                 a ${r}, ${r} 0 1,0 ${r * -2},0 `.replace(
+      //   /\s*\n\s*/g,
+      //   " "
+      // );
     } else {
-      const { type: lastType } = points[index - 1];
-      if (index < points.length - 1) {
-        const { x: x2, y: y2 } = points[index + 1];
-        if (lastType == "Z") {
-          return `${path} Z `;
-        } else if (type == "Z") {
-          return `${path} M ${x} ${y} C ${x} ${y} ${x} ${y} ${x2} ${y2} `;
-        } else {
-          return `${path} C ${x} ${y} ${x} ${y} ${x2} ${y2} `;
-        }
-      } else {
-        return path;
-      }
+      return `${path} L ${x} ${y}`;
+      // if (x2 && y2) {
+      //   return `${path} C ${x} ${y} ${x + 10} ${y + 10} ${x2} ${y2}`;
+      // } else {
+      //   return path;
+      // }
     }
   }, "");
 };
