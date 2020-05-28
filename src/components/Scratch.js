@@ -1,4 +1,4 @@
-import { getPointInSvgFromEvent } from "../util";
+import { b64DecodeUnicode, getPointInSvgFromEvent } from "../util";
 import React from "react";
 import { connect } from "react-redux";
 import { addPoint, selectPoints } from "../redux/features/cursor/cursorSlice";
@@ -119,7 +119,7 @@ class Scratch extends React.Component {
                 x={window.innerWidth / 9}
                 y={window.innerHeight / 9}
               >
-                {atob(text)}
+                {b64DecodeUnicode(text)}
               </text>
             ) : (
               <MaskPaths />
