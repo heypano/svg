@@ -117,7 +117,7 @@ class Scratch extends React.Component {
               <text
                 fontSize={window.innerHeight / 9}
                 x={window.innerWidth / 9}
-                y={window.innerHeight / 9}
+                y={window.innerHeight / 4}
               >
                 {b64DecodeUnicode(text)}
               </text>
