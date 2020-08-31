@@ -86,6 +86,7 @@ class Scratch extends React.Component {
   render() {
     const padding = 50;
     let text = this.props.match ? this.props.match.params.text : null;
+    const path = getPathFromPoints(this.props.points);
     return (
       <div className="svg-container">
         <Cursor debug={false} />
@@ -130,7 +131,7 @@ class Scratch extends React.Component {
 
           <g clipPath={`url(#mask)`}>
             <path
-              d={getPathFromPoints(this.props.points)}
+              d={path}
               strokeWidth={strokeWidth}
               fill="transparent"
               stroke="grey"

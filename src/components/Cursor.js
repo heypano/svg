@@ -10,9 +10,11 @@ import {
   setNextToolStage,
   selectTools,
   setPreviousTool,
-  setNextTool
+  setNextTool,
+  selectPoints
 } from "../redux/features/cursor/cursorSlice";
 import { debounce, throttle } from "throttle-debounce";
+import msgpack from "msgpack5";
 
 class Cursor extends React.Component {
   constructor(props) {
@@ -32,7 +34,22 @@ class Cursor extends React.Component {
       true,
       this.props.setNextTool.bind(this)
     );
+    this.save = this.save.bind(this);
+    this.msgpack = msgpack();
+    window.msgpack = this.msgpack;
   }
+
+  save() {
+    const a = window.msgpack.encode(this.props.points);
+    const b = window.msgpack.decode(a);
+    console.log(
+      this.props.points,
+      a.toString("base64").length,
+      a.toString("hex").length,
+      b
+    );
+  }
+
   componentDidMount() {
     document.onmousemove = this.onMouseMove.bind(this);
     document.onwheel = this.onWheel.bind(this);
@@ -76,6 +93,7 @@ class Cursor extends React.Component {
     const { x, y } = this.props.cursor;
     return (
       <>
+        <a onClick={this.save}>Save</a>
         {this.props.debug && (
           <div
             style={{
@@ -99,7 +117,8 @@ const mapStateToProps = state => ({
   currentTool: selectCurrentTool(state),
   toolStage: selectToolStage(state),
   toolName: selectToolName(state),
-  tools: selectTools(state)
+  tools: selectTools(state),
+  points: selectPoints(state)
 });
 const mapDispatchToProps = {
   setPosition,

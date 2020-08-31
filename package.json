@@ -5,6 +5,7 @@
   "dependencies": {
     "@reduxjs/toolkit": "^1.3.6",
     "gh-pages": "^2.2.0",
+    "msgpack5": "^4.2.1",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
     "react-redux": "^7.2.0",
@@ -16,16 +17,16 @@
     "@testing-library/jest-dom": "^4.2.4",
     "@testing-library/react": "^9.5.0",
     "@testing-library/user-event": "^7.2.1",
-    "tailwindcss": "^1.2.0",
-    "react-scripts": "^3.4.1"
+    "react-scripts": "^3.4.3",
+    "tailwindcss": "^1.2.0"
   },
   "scripts": {
     "start": "npm run build:style && react-scripts start",
-    "xpredeploy": "npm run build",
-    "deploy": "gh-pages -d build",
-    "preawsdeploy": "npm run build",
-    "awsdeploy": "aws --profile pupcodes s3 sync --delete --acl public-read build/ s3://catpaint",
-    "postawsdeploy": "echo http://catpaint.s3-website-us-east-1.amazonaws.com/draw",
+    "preghdeploy": "npm run build",
+    "ghdeploy": "gh-pages -d build",
+    "predeploy": "npm run build",
+    "deploy": "aws --profile pupcodes s3 sync --delete --acl public-read build/ s3://catpaint",
+    "postdeploy": "echo http://catpaint.s3-website-us-east-1.amazonaws.com/draw",
     "build:style": "tailwind build src/tailwindimports.css -c tailwind.config.js -o src/final.css",
     "build": "npm run build:style && react-scripts build",
     "postbuild": "cp build/index.html build/404.html",
@@ -34,7 +35,7 @@
     "fixSourceMaps": "sed -i '' 's/sourceMap: isEnvProduction && /sourceMap: /g' node_modules/react-scripts/config/webpack.config.js"
   },
   "eslintConfig": {
-    "extends": "react-app"
+    "extends": "react-app",
   },
   "browserslist": {
     "production": [
