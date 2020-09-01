@@ -14,7 +14,6 @@ import {
   selectPoints
 } from "../redux/features/cursor/cursorSlice";
 import { debounce, throttle } from "throttle-debounce";
-import msgpack from "msgpack5";
 
 class Cursor extends React.Component {
   constructor(props) {
@@ -33,20 +32,6 @@ class Cursor extends React.Component {
       50,
       true,
       this.props.setNextTool.bind(this)
-    );
-    this.save = this.save.bind(this);
-    this.msgpack = msgpack();
-    window.msgpack = this.msgpack;
-  }
-
-  save() {
-    const a = window.msgpack.encode(this.props.points);
-    const b = window.msgpack.decode(a);
-    console.log(
-      this.props.points,
-      a.toString("base64").length,
-      a.toString("hex").length,
-      b
     );
   }
 
@@ -93,7 +78,6 @@ class Cursor extends React.Component {
     const { x, y } = this.props.cursor;
     return (
       <>
-        <a onClick={this.save}>Save</a>
         {this.props.debug && (
           <div
             style={{

@@ -23,7 +23,7 @@ function App() {
             <Route exact path="/circle" component={Circle} />
             <Route exact path="/wrong" component={Wrong} />
             <Route exact path="/cloud" component={Cloud} />
-            <Route exact path="/cat" component={Cat} />
+            <Route exact path="/cat/:catName?" component={Cat} />
             <Route exact path="/test" component={Test} />
             <Route exact path="/draw" component={Draw} />
             <Route exact path="/paths" component={Paths} />

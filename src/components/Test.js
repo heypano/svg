@@ -15,10 +15,6 @@ class Test extends React.Component {
     }, 25);
   }
   render() {
-    let text =
-      this.props.match && this.props.match.params.text
-        ? this.props.match.params.text
-        : "Cat communication is the transfer of information by one or more cats that has an effect on the current or future behaviour of another animal, including humans. Cats use a range of communication modalities including vocal, visual, tactile and olfactory. ";
     return (
       <div
         className="svg-container p-4"

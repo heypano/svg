@@ -21,7 +21,7 @@
     "tailwindcss": "^1.2.0"
   },
   "scripts": {
-    "start": "npm run build:style && react-scripts start",
+    "start": "npm run build:style && HTTPS=true react-scripts start",
     "preghdeploy": "npm run build",
     "ghdeploy": "gh-pages -d build",
     "predeploy": "npm run build",
@@ -35,7 +35,7 @@
     "fixSourceMaps": "sed -i '' 's/sourceMap: isEnvProduction && /sourceMap: /g' node_modules/react-scripts/config/webpack.config.js"
   },
   "eslintConfig": {
-    "extends": "react-app",
+    "extends": "react-app"
   },
   "browserslist": {
     "production": [

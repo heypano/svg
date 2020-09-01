@@ -122,6 +122,9 @@ const cursorSlice = createSlice({
       const y = payload;
       state.y = y;
     },
+    setPoints(state, action) {
+      state.points = action.payload;
+    },
     addPoint(state, action) {
       const { currentTool } = state;
       const { x, y, type = 0, stage = 0 } = action.payload;
@@ -193,6 +196,7 @@ export const {
   setPositionX,
   setPositionY,
   addPoint,
+  setPoints,
   setCurrentTool,
   setNextToolStage,
   setPreviousTool,
