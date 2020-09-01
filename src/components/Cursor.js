@@ -1,17 +1,17 @@
 import React from "react";
 import { connect } from "react-redux";
 import {
-  selectCursorPosition,
-  selectToolStage,
   selectCurrentTool,
+  selectCursorPosition,
+  selectPoints,
   selectToolName,
-  setPosition,
-  setCurrentTool,
-  setNextToolStage,
   selectTools,
-  setPreviousTool,
+  selectToolStage,
+  setCurrentTool,
   setNextTool,
-  selectPoints
+  setNextToolStage,
+  setPosition,
+  setPreviousTool
 } from "../redux/features/cursor/cursorSlice";
 import { debounce, throttle } from "throttle-debounce";
 
@@ -59,11 +59,13 @@ class Cursor extends React.Component {
       case 39:
         this.throttledSetNextTool();
         break;
+      default:
+        break;
     }
   }
   onWheel(event) {
     // Do not mess with non zero tool stages
-    if (this.props.toolStage == 0) {
+    if (this.props.toolStage === 0) {
       const { deltaY } = event;
 
       if (deltaY > 0) {

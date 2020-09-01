@@ -23,7 +23,7 @@ export function getRandomColorNumberRGB() {
  */
 export function getRandomColorHSL() {
   const hue = getRandomHueHSL();
-  return `hsl(${getRandomHueHSL()}, 80%, 50%)`;
+  return `hsl(${hue}, 80%, 50%)`;
 }
 
 /**

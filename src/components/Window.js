@@ -2,11 +2,9 @@ import { getPointInSvgFromEvent } from "../util";
 import React from "react";
 import { connect } from "react-redux";
 import {
-  selectCursorPosition,
   selectCustomPosition,
   setCustomPosition
 } from "../redux/features/cursor/cursorSlice";
-import Cursor from "./Cursor";
 import { throttle } from "throttle-debounce";
 
 class Window extends React.Component {

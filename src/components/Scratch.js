@@ -1,21 +1,19 @@
 import { b64DecodeUnicode, getPointInSvgFromEvent } from "../util";
 import React from "react";
 import { connect } from "react-redux";
-import { addPoint, selectPoints } from "../redux/features/cursor/cursorSlice";
-import Cursor from "./Cursor";
 import {
+  addPoint,
   selectIsDrawing,
+  selectPoints,
   setIsDrawing,
   setIsNotDrawing
 } from "../redux/features/cursor/cursorSlice";
-import { debounce, throttle } from "throttle-debounce";
+import Cursor from "./Cursor";
+import { throttle } from "throttle-debounce";
 
 const strokeWidth = 60;
 
-const MaskPaths = ({ className }) => {
-  const widthChunk = window.innerWidth / 4;
-  const heightChunk = window.innerHeight / 4;
-  const padding = window.innerWidth / 10;
+const MaskPaths = props => {
   const Eye = () => (
     <path
       xmlns="http://www.w3.org/2000/svg"
@@ -84,7 +82,6 @@ class Scratch extends React.Component {
   }
 
   render() {
-    const padding = 50;
     let text = this.props.match ? this.props.match.params.text : null;
     const path = getPathFromPoints(this.props.points);
     return (
@@ -145,16 +142,15 @@ class Scratch extends React.Component {
 
 const getPathFromPoints = points => {
   return points.reduce((path, point, index) => {
-    const { x, y, type } = point;
-    const isNotLastPoint = index < points.length - 1;
+    const { x, y } = point;
+    // const isNotLastPoint = index < points.length - 1;
     const isNotFirstPoint = index > 0;
     const previousPoint = isNotFirstPoint ? points[index - 1] : {};
     const { x: x0, y: y0, type: lastType } = previousPoint;
-    const nextPoint = isNotLastPoint ? points[index + 1] : {};
-    const { x: x2, y: y2, type: nextType } = nextPoint;
-    const needToOpen = index == 0 || lastType == "Z";
-    const isSameAsLast = x0 == x && y0 == y;
-    let r = strokeWidth / 4;
+    // const nextPoint = isNotLastPoint ? points[index + 1] : {};
+    // const { x: x2, y: y2, type: nextType } = nextPoint;
+    const needToOpen = index === 0 || lastType === "Z";
+    const isSameAsLast = x0 === x && y0 === y;
 
     if (needToOpen) {
       return `${path} M ${x} ${y}`;

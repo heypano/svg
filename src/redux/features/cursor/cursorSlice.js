@@ -92,7 +92,7 @@ const cursorSlice = createSlice({
       state.isDrawing = true;
     },
     setCurrentTool(state, { payload }) {
-      const { stages, disabled } = state.tools[payload];
+      // const { stages, disabled } = state.tools[payload];
       state.currentTool = payload;
       state.toolStage = 0;
     },
@@ -142,7 +142,7 @@ const cursorSlice = createSlice({
 
       // Re-enable all the other tools
       for (const tool of Object.keys(state.tools)) {
-        if (tool != currentTool) {
+        if (tool !== currentTool) {
           state.tools[tool].disabled = false;
         }
       }

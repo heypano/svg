@@ -1,19 +1,17 @@
 import { getPointInSvgFromEvent } from "../util";
 import React from "react";
-import { throttle } from "throttle-debounce";
-import { getRandomColorHSL } from "../util";
-import Mark from "./Mark";
-import { addPoint, selectPoints } from "../redux/features/cursor/cursorSlice";
-import Cursor from "./Cursor";
 import {
+  addPoint,
   selectCurrentTool,
   selectIsDrawing,
+  selectPoints,
   selectTools,
   selectToolStage,
   setIsDrawing,
   setIsNotDrawing,
   setNextToolStage
 } from "../redux/features/cursor/cursorSlice";
+import Cursor from "./Cursor";
 import { connect } from "react-redux";
 
 class Paths extends React.Component {
@@ -42,15 +40,15 @@ class Paths extends React.Component {
       if (stage < stages - 1) {
         filteredPoints.splice(i);
       }
-      if (stage == stages - 1) {
+      if (stage === stages - 1) {
         break;
       }
     }
 
     for (const point of filteredPoints) {
       const { x, y, type, stage } = point;
-      const { stages, toolName, noPoints } = this.props.tools[type];
-      if (stage == 0) {
+      const { toolName, noPoints } = this.props.tools[type];
+      if (stage === 0) {
         if (noPoints) {
           result += `${toolName} `;
         } else {
@@ -175,12 +173,12 @@ class Paths extends React.Component {
             position: "fixed"
           }}
         >
-          <a onClick={this.savePMG} href="#" className="m-4">
+          <button onClick={this.savePMG} className="m-4">
             Save PNG
-          </a>
-          <a onClick={this.saveSVG} href="#" className="m-4">
+          </button>
+          <button onClick={this.saveSVG} className="m-4">
             Save SVG
-          </a>
+          </button>
         </div>
         <Cursor debug={true} />
         <svg

@@ -3,16 +3,14 @@ import React from "react";
 import { connect } from "react-redux";
 import {
   addPoint,
+  selectIsDrawing,
   selectPoints,
+  setIsDrawing,
+  setIsNotDrawing,
   setPoints
 } from "../redux/features/cursor/cursorSlice";
 import Cursor from "./Cursor";
-import {
-  selectIsDrawing,
-  setIsDrawing,
-  setIsNotDrawing
-} from "../redux/features/cursor/cursorSlice";
-import { debounce, throttle } from "throttle-debounce";
+import { throttle } from "throttle-debounce";
 import { CatPath, MaskPath } from "./cat/paths";
 import { getCat, saveCat } from "../api/cat";
 
@@ -98,7 +96,7 @@ class Cat extends React.Component {
     return (
       <div className="svg-container">
         <p>
-          <a onClick={this.save}>Save</a>
+          <button onClick={this.save}>Save</button>
           <input type="text" ref={this.nameInputRef} />
         </p>
         <Cursor debug={false} />
