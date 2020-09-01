@@ -27,22 +27,31 @@ class Cat extends React.Component {
   }
 
   componentDidMount() {
+    const { catName } = this.props.match.params;
+    console.log(this.props);
     // document.onmousemove = this.documentMouseMove.bind(this);
-    getCat().then(r => {
-      this.props.setPoints(r.points);
-    });
+    if (catName) {
+      getCat(catName).then(r => {
+        if (r.points) {
+          this.props.setPoints(r.points);
+        }
+      });
+    }
   }
 
   save() {
-    saveCat(this.nameInputRef.current.value, {
-      points: this.props.points
-    })
-      .then(r => {
-        console.log(r);
+    const { catName } = this.props.match.params;
+    if (catName) {
+      saveCat(catName, {
+        points: this.props.points
       })
-      .catch(e => {
-        console.log(e);
-      });
+        .then(r => {
+          console.log(r);
+        })
+        .catch(e => {
+          console.log(e);
+        });
+    }
   }
 
   documentMouseMove(event) {
@@ -97,7 +106,7 @@ class Cat extends React.Component {
       <div className="svg-container">
         <p>
           <button onClick={this.save}>Save</button>
-          <input type="text" ref={this.nameInputRef} />
+          {/*<input type="text" ref={this.nameInputRef} />*/}
         </p>
         <Cursor debug={false} />
         <svg
