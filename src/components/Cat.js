@@ -1,18 +1,21 @@
+import Grid from "@material-ui/core/Grid";
+
 import { getPointInSvgFromEvent } from "../util";
 import React from "react";
 import { connect } from "react-redux";
+import { throttle } from "throttle-debounce";
+import { CatPath, MaskPath } from "./cat/paths";
+import { getCat, saveCat } from "../api/cat";
+import CatPaintButton from "./cat/CatPaintButton";
 import {
   addPoint,
   selectIsDrawing,
   selectPoints,
   setIsDrawing,
   setIsNotDrawing,
-  setPoints
-} from "../redux/features/cursor/cursorSlice";
-import Cursor from "./Cursor";
-import { throttle } from "throttle-debounce";
-import { CatPath, MaskPath } from "./cat/paths";
-import { getCat, saveCat } from "../api/cat";
+  setPoints,
+  selectCurrentFill,
+} from "../redux/features/catSlice";
 
 class Cat extends React.Component {
   constructor(props) {
@@ -28,10 +31,9 @@ class Cat extends React.Component {
 
   componentDidMount() {
     const { catName } = this.props.match.params;
-    console.log(this.props);
     // document.onmousemove = this.documentMouseMove.bind(this);
     if (catName) {
-      getCat(catName).then(r => {
+      getCat(catName).then((r) => {
         if (r.points) {
           this.props.setPoints(r.points);
         }
@@ -43,36 +45,15 @@ class Cat extends React.Component {
     const { catName } = this.props.match.params;
     if (catName) {
       saveCat(catName, {
-        points: this.props.points
+        points: this.props.points,
       })
-        .then(r => {
+        .then((r) => {
           console.log(r);
         })
-        .catch(e => {
+        .catch((e) => {
           console.log(e);
         });
     }
-  }
-
-  documentMouseMove(event) {
-    const eyeBall = document.getElementById("rightEye");
-    const pupil = document.getElementById("rightPupil");
-
-    const eyeArea = eyeBall.getBoundingClientRect();
-    const pupilArea = pupil.getBoundingClientRect();
-
-    const R = eyeArea.width / 2;
-    const r = pupilArea.width / 2;
-    const centerX = eyeArea.left + R;
-    const centerY = eyeArea.top + R;
-    const x = event.clientX - centerX;
-    const y = event.clientY - centerY;
-    const theta = Math.atan2(y, x);
-    const angle = (theta * 180) / Math.PI + 360;
-
-    pupil.style.transform = `translateX(${R - r + "px"}) rotate(${angle +
-      "deg"})`;
-    pupil.style.transformOrigin = `${r + "px"} center`;
   }
 
   /**
@@ -88,7 +69,8 @@ class Cat extends React.Component {
   }
 
   drawPoint(x, y) {
-    this.props.addPoint({ x, y });
+    const { addPoint, fill } = this.props;
+    addPoint({ x, y, fill });
   }
 
   mouseOrTouchDown(event) {
@@ -101,91 +83,146 @@ class Cat extends React.Component {
     this.props.setIsNotDrawing();
   }
 
-  render() {
+  catStuff() {
+    const { points } = this.props;
     return (
-      <div className="svg-container">
-        <p>
+      <svg
+        onMouseDown={this.mouseOrTouchDown}
+        onTouchStart={this.mouseOrTouchDown}
+        onMouseUp={this.mouseOrTouchUp}
+        // onTouchEnd={this.mouseOrTouchUp}
+        onMouseMove={this.drawMove}
+        onTouchMove={this.drawMove}
+        id="Layer_1"
+        ref={this.svgRef}
+        viewBox="0 0 202.53 230.74"
+        style={
+          {
+            // enableBackground: "new 0 0 514.6 516.4;"
+          }
+        }
+        a
+      >
+        <defs>
+          <radialGradient
+            id="GradientReflect"
+            cx="0.5"
+            cy="0.5"
+            r="0.4"
+            fx="0.75"
+            fy="0.75"
+            spreadMethod="reflect"
+          >
+            <stop offset="0%" stopColor="hotpink" />
+            <stop offset="100%" stopColor="forestgreen" />
+          </radialGradient>
+        </defs>
+        <clipPath id="cat">
+          <MaskPath />
+        </clipPath>
+        <g clipPath="url(#cat)" width="100%" height="100%" className="catgroup">
+          {points.map((point, index) => {
+            const size = 30;
+            const { x, y, fill } = point;
+            return (
+              <circle
+                cx={x}
+                cy={y}
+                r={size}
+                key={index}
+                // fill="url(#GradientReflect)"
+                fill={fill}
+              />
+              // <text
+              //   x={x - size / 2}
+              //   y={y + size / 2}
+              //   fontSize={`${size}px`}
+              //   key={index}
+              // >
+              //   😺
+              // </text>
+            );
+          })}
+        </g>
+        <CatPath className="catOutline" />
+      </svg>
+    );
+  }
+
+  render() {
+    const gridItemProps = {
+      item: true,
+      container: true,
+      justify: "center",
+      xs: 3,
+      md: 12,
+    };
+
+    return (
+      <Grid
+        container
+        justify="center"
+        style={{
+          height: "100%",
+        }}
+      >
+        <Grid
+          item
+          container
+          justify="center"
+          xs={6}
+          md={12}
+          style={{
+            height: "10vh",
+          }}
+        >
           <button onClick={this.save}>Save</button>
           {/*<input type="text" ref={this.nameInputRef} />*/}
-        </p>
-        <Cursor debug={false} />
-        <svg
-          onMouseDown={this.mouseOrTouchDown}
-          onTouchStart={this.mouseOrTouchDown}
-          onMouseUp={this.mouseOrTouchUp}
-          // onTouchEnd={this.mouseOrTouchUp}
-          onMouseMove={this.drawMove}
-          onTouchMove={this.drawMove}
-          id="Layer_1"
-          ref={this.svgRef}
-          viewBox="0 0 202.53 230.74"
-          style={
-            {
-              // enableBackground: "new 0 0 514.6 516.4;"
-            }
-          }
+        </Grid>
+        <Grid
+          item
+          container
+          xs={6}
+          md={3}
+          justify="space-around"
+          alignItems="center"
         >
-          <defs>
-            <radialGradient
-              id="GradientReflect"
-              cx="0.5"
-              cy="0.5"
-              r="0.4"
-              fx="0.75"
-              fy="0.75"
-              spreadMethod="reflect"
-            >
-              <stop offset="0%" stopColor="hotpink" />
-              <stop offset="100%" stopColor="forestgreen" />
-            </radialGradient>
-          </defs>
-          <clipPath id="cat">
-            <MaskPath />
-          </clipPath>
-          <g
-            clipPath="url(#cat)"
-            width="100%"
-            height="100%"
-            className="catgroup"
-          >
-            {this.props.points.map((position, index) => {
-              const size = 50;
-              const { x, y } = position;
-              return (
-                // <circle
-                //   cx={x}
-                //   cy={y}
-                //   r={30}
-                //   key={index}
-                //   fill="url(#GradientReflect)"
-                // />
-                <text
-                  x={x - size / 2}
-                  y={y + size / 2}
-                  fontSize={`${size}px`}
-                  key={index}
-                >
-                  😺
-                </text>
-              );
-            })}
-          </g>
-          <CatPath className="catOutline" />
-        </svg>
-      </div>
+          <Grid {...gridItemProps}>
+            <CatPaintButton fill="#388E3C" />
+          </Grid>
+          <Grid {...gridItemProps}>
+            <CatPaintButton fill="#FBC02D" />
+          </Grid>
+          <Grid {...gridItemProps}>
+            <CatPaintButton fill="#d32f2f" />
+          </Grid>
+        </Grid>
+        <Grid
+          item
+          xs={12}
+          md={6}
+          style={{
+            height: "90vh",
+            paddingBottom: "10px",
+          }}
+        >
+          {this.catStuff()}
+        </Grid>
+      </Grid>
     );
   }
 }
 
-const mapStateToProps = state => ({
+const mapStateToProps = (state) => ({
   points: selectPoints(state),
-  isDrawing: selectIsDrawing(state)
+  isDrawing: selectIsDrawing(state),
+  fill: selectCurrentFill(state),
 });
 const mapDispatchToProps = {
   addPoint,
   setPoints,
   setIsNotDrawing,
-  setIsDrawing
+  setIsDrawing,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Cat);

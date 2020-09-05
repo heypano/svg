@@ -41,9 +41,10 @@ export function getRandomHueHSL() {
  * @returns {[Number, Number]}
  */
 export function getPointInSvgFromEvent(svg, event) {
-  const { offsetX, offsetY, touches } = event.nativeEvent;
-  const x = touches ? touches[0].clientX : offsetX;
-  const y = touches ? touches[0].clientY : offsetY;
+  const { touches, clientX, clientY } = event.nativeEvent;
+  console.log(event.nativeEvent);
+  const x = touches ? touches[0].clientX : clientX;
+  const y = touches ? touches[0].clientY : clientY;
   return getPointInSvg(svg, x, y);
 }
 
@@ -80,7 +81,7 @@ export function b64DecodeUnicode(str) {
   return decodeURIComponent(
     atob(decodeURIComponent(str))
       .split("")
-      .map(function(c) {
+      .map(function (c) {
         return "%" + ("00" + c.charCodeAt(0).toString(16)).slice(-2);
       })
       .join("")
