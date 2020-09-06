@@ -218,7 +218,7 @@ class Cat extends React.Component {
           item
           container
           justify="center"
-          xs={6}
+          xs={3}
           md={12}
           style={{
             height: "10%",
@@ -233,7 +233,7 @@ class Cat extends React.Component {
         <Grid
           item
           container
-          xs={6}
+          xs={9}
           md={3}
           justify="space-around"
           alignItems="center"
