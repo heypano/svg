@@ -16,6 +16,10 @@ import {
   setPoints,
   selectCurrentFill,
   selectCurrentFillStyle,
+  setPaths,
+  selectPaths,
+  addPath,
+  addPointToPath,
 } from "../redux/features/catSlice";
 
 class Cat extends React.Component {
@@ -65,7 +69,8 @@ class Cat extends React.Component {
     if (this.props.isDrawing) {
       const svg = this.svgRef.current;
       const [x, y] = getPointInSvgFromEvent(svg, event);
-      this.drawPoint(x, y);
+      // this.drawPoint(x, y);
+      this.drawPointInPath(x, y, "L");
     }
   }
 
@@ -85,18 +90,29 @@ class Cat extends React.Component {
     addPoint(point);
   }
 
+  drawPointInPath(x, y, type = "M") {
+    const { addPointToPath } = this.props;
+    addPointToPath(`${type} ${x} ${y} `);
+  }
+  addNewPath() {
+    const { fillStyle } = this.props;
+    this.props.addPath({ fillStyle });
+  }
+
   mouseOrTouchDown(event) {
     const svg = this.svgRef.current;
     const [x, y] = getPointInSvgFromEvent(svg, event);
     this.props.setIsDrawing();
-    this.drawPoint(x, y);
+    this.addNewPath();
+    // this.drawPoint(x, y);
+    this.drawPointInPath(x, y);
   }
   mouseOrTouchUp(event) {
     this.props.setIsNotDrawing();
   }
 
   catStuff() {
-    const { points } = this.props;
+    const { points, paths } = this.props;
     return (
       <svg
         onMouseDown={this.mouseOrTouchDown}
@@ -113,7 +129,6 @@ class Cat extends React.Component {
             // enableBackground: "new 0 0 514.6 516.4;"
           }
         }
-        a
       >
         <defs>
           <radialGradient
@@ -133,27 +148,40 @@ class Cat extends React.Component {
           <MaskPath />
         </clipPath>
         <g clipPath="url(#cat)" width="100%" height="100%" className="catgroup">
-          {points.map((point, index) => {
-            const size = 30;
-            const { x, y, fill, fillStyle = {} } = point;
+          {/*{points.map((point, index) => {*/}
+          {/*  const size = 30;*/}
+          {/*  const { x, y, fill, fillStyle = {} } = point;*/}
+          {/*  return (*/}
+          {/*    <circle*/}
+          {/*      cx={x}*/}
+          {/*      cy={y}*/}
+          {/*      r={size}*/}
+          {/*      key={index}*/}
+          {/*      // fill="url(#GradientReflect)"*/}
+          {/*      fill={fill || "transparent"}*/}
+          {/*      style={fillStyle}*/}
+          {/*    />*/}
+          {/*    // <text*/}
+          {/*    //   x={x - size / 2}*/}
+          {/*    //   y={y + size / 2}*/}
+          {/*    //   fontSize={`${size}px`}*/}
+          {/*    //   key={index}*/}
+          {/*    // >*/}
+          {/*    //   😺*/}
+          {/*    // </text>*/}
+          {/*  );*/}
+          {/*})}*/}
+          {paths.map((path, index) => {
+            const { fillStyle, d } = path;
             return (
-              <circle
-                cx={x}
-                cy={y}
-                r={size}
+              <path
                 key={index}
-                // fill="url(#GradientReflect)"
-                fill={fill || "transparent"}
                 style={fillStyle}
+                d={d}
+                strokeWidth={30}
+                strokeLinecap="round"
+                strokeLinejoin="round"
               />
-              // <text
-              //   x={x - size / 2}
-              //   y={y + size / 2}
-              //   fontSize={`${size}px`}
-              //   key={index}
-              // >
-              //   😺
-              // </text>
             );
           })}
         </g>
@@ -201,18 +229,41 @@ class Cat extends React.Component {
           alignItems="center"
         >
           <Grid {...gridItemProps}>
-            <CatPaintButton fill="#388E3C" />
-          </Grid>
-          <Grid {...gridItemProps}>
-            <CatPaintButton fill="#FBC02D" />
-          </Grid>
-          <Grid {...gridItemProps}>
-            <CatPaintButton fill="#d32f2f" />
+            <CatPaintButton
+              fillStyle={{
+                // fill: "#388E3C",
+                fill: "transparent",
+                stroke: "#388E3C",
+                backgroundColor: "#388E3C",
+              }}
+            />
           </Grid>
           <Grid {...gridItemProps}>
             <CatPaintButton
-              complexStyle={{
-                fill: "hsla(10, 0%, 50%, 30%)",
+              fillStyle={{
+                // fill: "#FBC02D",
+                fill: "transparent",
+                stroke: "#FBC02D",
+                backgroundColor: "#FBC02D",
+              }}
+            />
+          </Grid>
+          <Grid {...gridItemProps}>
+            <CatPaintButton
+              fillStyle={{
+                // fill: "#d32f2f",
+                fill: "transparent",
+                stroke: "#d32f2f",
+                backgroundColor: "#d32f2f",
+              }}
+            />
+          </Grid>
+          <Grid {...gridItemProps}>
+            <CatPaintButton
+              fillStyle={{
+                // fill: "hsla(10, 0%, 50%, 30%)",
+                fill: "transparent",
+                stroke: "hsla(10, 0%, 50%, 30%)",
                 backgroundColor: "hsla(10, 0%, 50%, 30%)",
                 filter: "blur(60%)",
               }}
@@ -238,14 +289,17 @@ class Cat extends React.Component {
 const mapStateToProps = (state) => ({
   points: selectPoints(state),
   isDrawing: selectIsDrawing(state),
-  fill: selectCurrentFill(state),
   fillStyle: selectCurrentFillStyle(state),
+  paths: selectPaths(state),
 });
 const mapDispatchToProps = {
   addPoint,
   setPoints,
   setIsNotDrawing,
   setIsDrawing,
+  setPaths,
+  addPath,
+  addPointToPath,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Cat);

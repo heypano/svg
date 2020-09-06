@@ -2,33 +2,25 @@ import React from "react";
 import Grid from "@material-ui/core/Grid";
 import Button from "@material-ui/core/Button";
 import { connect } from "react-redux";
-import {
-  setCurrentFill,
-  setCurrentFillStyle,
-} from "../../redux/features/catSlice";
+import { setCurrentFillStyle } from "../../redux/features/catSlice";
 
 const CatPaintButton = ({
   fill = "",
-  complexStyle = {},
-  setCurrentFill,
+  fillStyle = {},
   setCurrentFillStyle,
   ...rest
 }) => {
   const styleObj = {
     minHeight: "5vh",
     backgroundColor: fill,
-    ...complexStyle,
+    ...fillStyle,
   };
 
   return (
     <Button
       style={styleObj}
       onClick={() => {
-        if (Object.keys(complexStyle).length > 0) {
-          setCurrentFillStyle(complexStyle);
-        } else {
-          setCurrentFill(fill);
-        }
+        setCurrentFillStyle(fillStyle);
       }}
       fullWidth={true}
       {...rest}
@@ -39,7 +31,6 @@ const CatPaintButton = ({
 };
 
 const mapDispatchToProps = {
-  setCurrentFill,
   setCurrentFillStyle,
 };
 

@@ -8,10 +8,14 @@ const catSlice = createSlice({
   initialState: {
     isDrawing: false,
     currentTool: {},
-    currentFill: "",
-    currentFillStyle: {},
+    currentFillStyle: {
+      fill: "transparent",
+      stroke: "#FBC02D",
+      backgroundColor: "#FBC02D",
+    },
     toolStage: 0,
     points: [],
+    paths: [],
   },
   reducers: {
     setIsDrawing(state) {
@@ -20,13 +24,8 @@ const catSlice = createSlice({
     setIsNotDrawing(state) {
       state.isDrawing = false;
     },
-    setCurrentFill(state, { payload }) {
-      state.currentFill = payload;
-      state.currentFillStyle = {};
-    },
     setCurrentFillStyle(state, { payload }) {
       state.currentFillStyle = payload;
-      state.currentFill = "";
     },
     setCurrentTool(state, { payload }) {
       // const { stages, disabled } = state.tools[payload];
@@ -36,8 +35,21 @@ const catSlice = createSlice({
     setNextToolStage(state, { payload }) {
       state.toolStage++;
     },
-    setPoints(state, action) {
-      state.points = action.payload;
+    setPaths(state, { payload }) {
+      state.paths = payload;
+    },
+    addPath(state, { payload }) {
+      const { fillStyle } = payload;
+      state.paths.push({
+        fillStyle,
+        d: "",
+      });
+    },
+    addPointToPath(state, { payload }) {
+      state.paths[state.paths.length - 1].d += payload;
+    },
+    setPoints(state, { payload }) {
+      state.points = payload;
     },
     addPoint(state, action) {
       const point = action.payload;
@@ -58,10 +70,6 @@ export const selectIsDrawing = createSelector(
   (state) => state[name],
   (cursor) => cursor.isDrawing
 );
-export const selectCurrentFill = createSelector(
-  (state) => state[name],
-  (cursor) => cursor.currentFill
-);
 export const selectCurrentFillStyle = createSelector(
   (state) => state[name],
   (cursor) => cursor.currentFillStyle
@@ -78,16 +86,22 @@ export const selectPoints = createSelector(
   (state) => state[name],
   (cursor) => cursor.points
 );
+export const selectPaths = createSelector(
+  (state) => state[name],
+  (cursor) => cursor.paths
+);
 
 export const {
   setIsDrawing,
   setIsNotDrawing,
   setCurrentTool,
-  setCurrentFill,
   setCurrentFillStyle,
   setNextToolStage,
   setPoints,
   addPoint,
+  setPaths,
+  addPath,
+  addPointToPath,
 } = catSlice.actions;
 
 export default catSlice.reducer;
