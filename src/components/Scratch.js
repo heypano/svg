@@ -6,14 +6,14 @@ import {
   selectIsDrawing,
   selectPoints,
   setIsDrawing,
-  setIsNotDrawing
-} from "../redux/features/cursor/cursorSlice";
+  setIsNotDrawing,
+} from "../redux/features/cursorSlice";
 import Cursor from "./Cursor";
 import { throttle } from "throttle-debounce";
 
 const strokeWidth = 60;
 
-const MaskPaths = props => {
+const MaskPaths = (props) => {
   const Eye = () => (
     <path
       xmlns="http://www.w3.org/2000/svg"
@@ -140,7 +140,7 @@ class Scratch extends React.Component {
   }
 }
 
-const getPathFromPoints = points => {
+const getPathFromPoints = (points) => {
   return points.reduce((path, point, index) => {
     const { x, y } = point;
     // const isNotLastPoint = index < points.length - 1;
@@ -180,9 +180,9 @@ const getPathFromPoints = points => {
   }, "");
 };
 
-const mapStateToProps = state => ({
+const mapStateToProps = (state) => ({
   points: selectPoints(state),
-  isDrawing: selectIsDrawing(state)
+  isDrawing: selectIsDrawing(state),
 });
 const mapDispatchToProps = { addPoint, setIsNotDrawing, setIsDrawing };
 

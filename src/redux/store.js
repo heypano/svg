@@ -1,6 +1,6 @@
 import { configureStore } from "@reduxjs/toolkit";
 // import rootReducer from "./rootReducer";
-import cursor from "./features/cursor/cursorSlice";
+import cursor from "./features/cursorSlice";
 import cat from "./features/catSlice";
 
 const store = configureStore({

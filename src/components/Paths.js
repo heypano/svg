@@ -9,8 +9,8 @@ import {
   selectToolStage,
   setIsDrawing,
   setIsNotDrawing,
-  setNextToolStage
-} from "../redux/features/cursor/cursorSlice";
+  setNextToolStage,
+} from "../redux/features/cursorSlice";
 import Cursor from "./Cursor";
 import { connect } from "react-redux";
 
@@ -80,7 +80,7 @@ class Paths extends React.Component {
       x,
       y,
       type: this.props.currentTool,
-      stage: this.props.toolStage
+      stage: this.props.toolStage,
     });
   }
 
@@ -110,7 +110,7 @@ class Paths extends React.Component {
     const svgBlob = new Blob([sizedSVG], { type: "image/svg+xml" });
     const svgUrl = URL.createObjectURL(svgBlob);
     if (format === "png") {
-      this.convertToPNG(svgUrl).then(href => {
+      this.convertToPNG(svgUrl).then((href) => {
         console.log(svgUrl, href, format, name);
         return this.downloadImg(href, format, name);
       });
@@ -133,7 +133,7 @@ class Paths extends React.Component {
   convertToPNG(svgUrl) {
     return new Promise((resolve, reject) => {
       const img = new Image();
-      img.addEventListener("load", ev => {
+      img.addEventListener("load", (ev) => {
         console.log("www");
       });
       img.onload = () => {
@@ -155,7 +155,7 @@ class Paths extends React.Component {
     downloadLink.download = `${name}.${format}`;
     downloadLink.href = href;
     document.body.appendChild(downloadLink);
-    downloadLink.onclick = function(e) {
+    downloadLink.onclick = function (e) {
       setTimeout(() => {
         console.log("revoke");
         URL.revokeObjectURL(this.href);
@@ -170,7 +170,7 @@ class Paths extends React.Component {
       <div className="svg-container">
         <div
           style={{
-            position: "fixed"
+            position: "fixed",
           }}
         >
           <button onClick={this.savePMG} className="m-4">
@@ -214,18 +214,18 @@ class Paths extends React.Component {
   }
 }
 
-const mapStateToProps = state => ({
+const mapStateToProps = (state) => ({
   points: selectPoints(state),
   currentTool: selectCurrentTool(state),
   toolStage: selectToolStage(state),
   isDrawing: selectIsDrawing(state),
-  tools: selectTools(state)
+  tools: selectTools(state),
 });
 const mapDispatchToProps = {
   addPoint,
   setIsNotDrawing,
   setIsDrawing,
-  setNextToolStage
+  setNextToolStage,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Paths);

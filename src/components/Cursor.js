@@ -11,8 +11,8 @@ import {
   setNextTool,
   setNextToolStage,
   setPosition,
-  setPreviousTool
-} from "../redux/features/cursor/cursorSlice";
+  setPreviousTool,
+} from "../redux/features/cursorSlice";
 import { debounce, throttle } from "throttle-debounce";
 
 class Cursor extends React.Component {
@@ -86,7 +86,7 @@ class Cursor extends React.Component {
               position: "fixed",
               transform: `translate(${x}px, ${y + 10}px)`,
               fontSize: "8rem",
-              userSelect: "none"
+              userSelect: "none",
             }}
           >
             {this.props.toolName}
@@ -98,20 +98,20 @@ class Cursor extends React.Component {
   }
 }
 
-const mapStateToProps = state => ({
+const mapStateToProps = (state) => ({
   cursor: selectCursorPosition(state),
   currentTool: selectCurrentTool(state),
   toolStage: selectToolStage(state),
   toolName: selectToolName(state),
   tools: selectTools(state),
-  points: selectPoints(state)
+  points: selectPoints(state),
 });
 const mapDispatchToProps = {
   setPosition,
   setCurrentTool,
   setNextToolStage,
   setPreviousTool,
-  setNextTool
+  setNextTool,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Cursor);
