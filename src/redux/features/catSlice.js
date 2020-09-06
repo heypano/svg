@@ -9,6 +9,7 @@ const catSlice = createSlice({
     isDrawing: false,
     currentTool: {},
     currentFill: "",
+    currentFillStyle: {},
     toolStage: 0,
     points: [],
   },
@@ -21,6 +22,11 @@ const catSlice = createSlice({
     },
     setCurrentFill(state, { payload }) {
       state.currentFill = payload;
+      state.currentFillStyle = {};
+    },
+    setCurrentFillStyle(state, { payload }) {
+      state.currentFillStyle = payload;
+      state.currentFill = "";
     },
     setCurrentTool(state, { payload }) {
       // const { stages, disabled } = state.tools[payload];
@@ -56,6 +62,10 @@ export const selectCurrentFill = createSelector(
   (state) => state[name],
   (cursor) => cursor.currentFill
 );
+export const selectCurrentFillStyle = createSelector(
+  (state) => state[name],
+  (cursor) => cursor.currentFillStyle
+);
 export const selectCurrentTool = createSelector(
   (state) => state[name],
   (cursor) => cursor.currentTool
@@ -74,6 +84,7 @@ export const {
   setIsNotDrawing,
   setCurrentTool,
   setCurrentFill,
+  setCurrentFillStyle,
   setNextToolStage,
   setPoints,
   addPoint,

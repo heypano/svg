@@ -42,7 +42,6 @@ export function getRandomHueHSL() {
  */
 export function getPointInSvgFromEvent(svg, event) {
   const { touches, clientX, clientY } = event.nativeEvent;
-  console.log(event.nativeEvent);
   const x = touches ? touches[0].clientX : clientX;
   const y = touches ? touches[0].clientY : clientY;
   return getPointInSvg(svg, x, y);

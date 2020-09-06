@@ -15,6 +15,7 @@ import {
   setIsNotDrawing,
   setPoints,
   selectCurrentFill,
+  selectCurrentFillStyle,
 } from "../redux/features/catSlice";
 
 class Cat extends React.Component {
@@ -69,8 +70,19 @@ class Cat extends React.Component {
   }
 
   drawPoint(x, y) {
-    const { addPoint, fill } = this.props;
-    addPoint({ x, y, fill });
+    const { addPoint, fill, fillStyle } = this.props;
+    const point = {
+      x,
+      y,
+    };
+
+    if (Object.keys(fillStyle).length > 0) {
+      point.fillStyle = fillStyle;
+    } else {
+      point.fill = fill;
+    }
+
+    addPoint(point);
   }
 
   mouseOrTouchDown(event) {
@@ -123,7 +135,7 @@ class Cat extends React.Component {
         <g clipPath="url(#cat)" width="100%" height="100%" className="catgroup">
           {points.map((point, index) => {
             const size = 30;
-            const { x, y, fill } = point;
+            const { x, y, fill, fillStyle = {} } = point;
             return (
               <circle
                 cx={x}
@@ -131,7 +143,8 @@ class Cat extends React.Component {
                 r={size}
                 key={index}
                 // fill="url(#GradientReflect)"
-                fill={fill}
+                fill={fill || "transparent"}
+                style={fillStyle}
               />
               // <text
               //   x={x - size / 2}
@@ -154,7 +167,7 @@ class Cat extends React.Component {
       item: true,
       container: true,
       justify: "center",
-      xs: 3,
+      xs: 2,
       md: 12,
     };
 
@@ -173,7 +186,7 @@ class Cat extends React.Component {
           xs={6}
           md={12}
           style={{
-            height: "10vh",
+            height: "10%",
           }}
         >
           <button onClick={this.save}>Save</button>
@@ -196,13 +209,22 @@ class Cat extends React.Component {
           <Grid {...gridItemProps}>
             <CatPaintButton fill="#d32f2f" />
           </Grid>
+          <Grid {...gridItemProps}>
+            <CatPaintButton
+              complexStyle={{
+                fill: "hsla(10, 0%, 50%, 30%)",
+                backgroundColor: "hsla(10, 0%, 50%, 30%)",
+                filter: "blur(60%)",
+              }}
+            />
+          </Grid>
         </Grid>
         <Grid
           item
           xs={12}
           md={6}
           style={{
-            height: "90vh",
+            height: "90%",
             paddingBottom: "10px",
           }}
         >
@@ -217,6 +239,7 @@ const mapStateToProps = (state) => ({
   points: selectPoints(state),
   isDrawing: selectIsDrawing(state),
   fill: selectCurrentFill(state),
+  fillStyle: selectCurrentFillStyle(state),
 });
 const mapDispatchToProps = {
   addPoint,
