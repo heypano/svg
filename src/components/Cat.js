@@ -7,7 +7,6 @@ import { throttle } from "throttle-debounce";
 import { CatPath, MaskPath } from "./cat/paths";
 import { getCat, saveCat } from "../api/cat";
 import CatPaintButton from "./cat/CatPaintButton";
-import { ActionCreators } from "redux-undo";
 
 import {
   addPoint,
@@ -20,6 +19,7 @@ import {
   setPaths,
   selectPaths,
   addPath,
+  removePath,
   addPointToPath,
 } from "../redux/features/catSlice";
 import { Button } from "@material-ui/core";
@@ -222,9 +222,12 @@ class Cat extends React.Component {
           md={12}
           style={{
             height: "10%",
+            padding: "1em",
           }}
         >
-          <button onClick={this.save}>Save</button>
+          <Button color="primary" variant="contained" onClick={this.save}>
+            Save
+          </Button>
           {/*<input type="text" ref={this.nameInputRef} />*/}
         </Grid>
         <Grid
@@ -277,7 +280,16 @@ class Cat extends React.Component {
             />
           </Grid>
           <Grid {...gridItemProps}>
-            <Button onClick={() => this.props.undo()}>Undo</Button>
+            <Button
+              color="primary"
+              variant="contained"
+              fullWidth={true}
+              onClick={() => {
+                this.props.removePath();
+              }}
+            >
+              Undo
+            </Button>
           </Grid>
         </Grid>
         <Grid
@@ -314,8 +326,8 @@ const mapDispatchToProps = (dispatch) => {
         setIsDrawing,
         setPaths,
         addPath,
+        removePath,
         addPointToPath,
-        undo: () => dispatch(ActionCreators.undo()),
       },
       dispatch
     ),

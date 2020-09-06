@@ -45,6 +45,9 @@ const catSlice = createSlice({
         d: "",
       });
     },
+    removePath(state) {
+      state.paths.pop();
+    },
     addPointToPath(state, { payload }) {
       state.paths[state.paths.length - 1].d += payload;
     },
@@ -67,27 +70,27 @@ const catSlice = createSlice({
 });
 
 export const selectIsDrawing = createSelector(
-  (state) => state[name].present,
+  (state) => state[name],
   (cursor) => cursor.isDrawing
 );
 export const selectCurrentFillStyle = createSelector(
-  (state) => state[name].present,
+  (state) => state[name],
   (cursor) => cursor.currentFillStyle
 );
 export const selectCurrentTool = createSelector(
-  (state) => state[name].present,
+  (state) => state[name],
   (cursor) => cursor.currentTool
 );
 export const selectToolStage = createSelector(
-  (state) => state[name].present,
+  (state) => state[name],
   (cursor) => cursor.toolStage
 );
 export const selectPoints = createSelector(
-  (state) => state[name].present,
+  (state) => state[name],
   (cursor) => cursor.points
 );
 export const selectPaths = createSelector(
-  (state) => state[name].present,
+  (state) => state[name],
   (cursor) => cursor.paths
 );
 
@@ -101,6 +104,7 @@ export const {
   addPoint,
   setPaths,
   addPath,
+  removePath,
   addPointToPath,
 } = catSlice.actions;
 
