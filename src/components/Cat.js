@@ -42,6 +42,9 @@ class Cat extends React.Component {
         if (r.points) {
           this.props.setPoints(r.points);
         }
+        if (r.paths) {
+          this.props.setPaths(r.paths);
+        }
       });
     }
   }
@@ -51,6 +54,7 @@ class Cat extends React.Component {
     if (catName) {
       saveCat(catName, {
         points: this.props.points,
+        paths: this.props.paths,
       })
         .then((r) => {
           console.log(r);
