@@ -7,6 +7,8 @@ import { throttle } from "throttle-debounce";
 import { CatPath, MaskPath } from "./cat/paths";
 import { getCat, saveCat } from "../api/cat";
 import CatPaintButton from "./cat/CatPaintButton";
+import { ActionCreators } from "redux-undo";
+
 import {
   addPoint,
   selectIsDrawing,
@@ -14,13 +16,14 @@ import {
   setIsDrawing,
   setIsNotDrawing,
   setPoints,
-  selectCurrentFill,
   selectCurrentFillStyle,
   setPaths,
   selectPaths,
   addPath,
   addPointToPath,
 } from "../redux/features/catSlice";
+import { Button } from "@material-ui/core";
+import { bindActionCreators } from "redux";
 
 class Cat extends React.Component {
   constructor(props) {
@@ -273,6 +276,9 @@ class Cat extends React.Component {
               }}
             />
           </Grid>
+          <Grid {...gridItemProps}>
+            <Button onClick={() => this.props.undo()}>Undo</Button>
+          </Grid>
         </Grid>
         <Grid
           item
@@ -296,14 +302,24 @@ const mapStateToProps = (state) => ({
   fillStyle: selectCurrentFillStyle(state),
   paths: selectPaths(state),
 });
-const mapDispatchToProps = {
-  addPoint,
-  setPoints,
-  setIsNotDrawing,
-  setIsDrawing,
-  setPaths,
-  addPath,
-  addPointToPath,
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    dispatch,
+    ...bindActionCreators(
+      {
+        addPoint,
+        setPoints,
+        setIsNotDrawing,
+        setIsDrawing,
+        setPaths,
+        addPath,
+        addPointToPath,
+        undo: () => dispatch(ActionCreators.undo()),
+      },
+      dispatch
+    ),
+  };
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Cat);

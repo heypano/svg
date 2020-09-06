@@ -67,27 +67,27 @@ const catSlice = createSlice({
 });
 
 export const selectIsDrawing = createSelector(
-  (state) => state[name],
+  (state) => state[name].present,
   (cursor) => cursor.isDrawing
 );
 export const selectCurrentFillStyle = createSelector(
-  (state) => state[name],
+  (state) => state[name].present,
   (cursor) => cursor.currentFillStyle
 );
 export const selectCurrentTool = createSelector(
-  (state) => state[name],
+  (state) => state[name].present,
   (cursor) => cursor.currentTool
 );
 export const selectToolStage = createSelector(
-  (state) => state[name],
+  (state) => state[name].present,
   (cursor) => cursor.toolStage
 );
 export const selectPoints = createSelector(
-  (state) => state[name],
+  (state) => state[name].present,
   (cursor) => cursor.points
 );
 export const selectPaths = createSelector(
-  (state) => state[name],
+  (state) => state[name].present,
   (cursor) => cursor.paths
 );
 

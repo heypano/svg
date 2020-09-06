@@ -13,6 +13,7 @@
     "react-redux": "^7.2.0",
     "react-router-dom": "^5.1.2",
     "redux": "^4.0.5",
+    "redux-undo": "^1.0.1",
     "throttle-debounce": "^2.1.0"
   },
   "devDependencies": {
