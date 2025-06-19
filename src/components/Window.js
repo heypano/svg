@@ -1,5 +1,5 @@
 import { getPointInSvgFromEvent } from "../util";
-import React from "react";
+import React, { useMemo } from "react";
 import { connect } from "react-redux";
 import {
   selectCustomPosition,
@@ -11,6 +11,7 @@ class Window extends React.Component {
   constructor(props) {
     super(props);
     this.onMove = this.onMove.bind(this);
+    this.isTouchDevice = false;
     this.svgRef = React.createRef();
     this.catPathRef = React.createRef();
     this.throttledSetPosition = throttle(
@@ -18,6 +19,9 @@ class Window extends React.Component {
       true,
       this.props.setCustomPosition.bind(this)
     );
+  }
+  componentDidMount() {
+    this.isTouchDevice = window.matchMedia("(pointer: coarse)").matches;
   }
 
   /**
@@ -32,8 +36,14 @@ class Window extends React.Component {
 
   render() {
     const catSize = this.catPathRef.current?.getBoundingClientRect?.();
-    const xOffset = catSize ? catSize.width / 2 : 100;
-    const yOffset = catSize ? catSize.height / 2 : 110;
+    let xOffset = catSize ? catSize.width / 2 : 100;
+    let yOffset = catSize ? catSize.height / 2 : 110;
+
+    if (this.isTouchDevice) {
+      xOffset += catSize.width;
+      yOffset += catSize.height;
+    }
+
     return (
       <div className="svg-container">
         <svg

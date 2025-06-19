@@ -48,7 +48,7 @@ svg{
 
 @media (pointer: coarse) {
   svg {
-    transform: translate(-100%, -100%);
+    /*transform: translate(-100%, -100%);*/
   }
 }
 
