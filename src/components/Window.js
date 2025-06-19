@@ -64,7 +64,7 @@ class Window extends React.Component {
             className="catgroup"
           >
             <image
-              href={`//placekitten.com/${window.innerWidth}/${window.innerHeight}`}
+              href={`//placebear.com/${window.innerWidth}/${window.innerHeight}`}
             ></image>
           </g>
         </svg>
